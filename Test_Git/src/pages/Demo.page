@@ -1,0 +1,34 @@
+<apex:page controller="showAccountListController">
+  <apex:pageBlock title="pageBlockTable">
+        
+             <apex:dataTable value="{!account}" var="acc"  cellpadding="8" border="2">
+             
+             <apex:column value="{!acc.Email_ID__c}"/> 
+             <apex:column value="{!acc.Phone}" rowspan="2"/>
+            
+        
+        </apex:dataTable>
+     </apex:pageBlock> 
+</apex:page>
+
+
+<!--<apex:pageBlock title="Contacts">
+    <apex:dataTable value="{!account.Contacts}"
+                    var="contact"
+                    cellPadding="4" border="1">
+
+      <apex:column >
+
+        {!contact.FirstName}
+
+      </apex:column>
+
+      <apex:column >
+
+        {!contact.LastName}
+
+      </apex:column>
+
+    </apex:dataTable>
+
+  </apex:pageBlock> -->

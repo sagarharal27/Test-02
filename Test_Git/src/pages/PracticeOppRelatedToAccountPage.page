@@ -1,0 +1,148 @@
+<apex:page controller="PracticeOppRelatedToAccount" docType="html-5.0">
+    
+    <style>
+            .pageBlockCss {
+                border-collapse:collapse;
+            }
+            table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
+            content: " \25B4\25BE" 
+            }
+            .trColor {
+                background-color: #D6EB99;
+            }
+            .tdColor {
+                background-color:#E6FFD8;
+            }
+            
+    </style>
+
+    <apex:includeScript value="{!$Resource.sortTableFile}"/>
+    
+    <table border="1" width="100%" class="sortable pageBlockCss">
+        <thead>
+            <tr class="tdColor">
+                <th>Account Name</th>
+                <th>Account Phone</th>
+            </tr>
+        </thead>
+    
+        <apex:repeat value="{!lstToHoldOpp}" var="lst">
+        
+            <tr>
+                <td>
+                    <br/><apex:outputText value="{!lst.Name}"/>
+            
+                    <table border="1" class="sortable pageBlockCss" id="indextable" width="100%">
+                
+                    <thead>
+                        <tr class="tdColor">
+                            <th width="30%">Related Opportunities</th>
+                            <th width="30%">Opportunity Stage</th>
+                            <th width="30%">CloseDate</th>
+                        </tr>
+                    </thead>
+                 
+                    <tbody>
+                        <apex:repeat value="{!lst.Opportunities}" var="lstOppName">
+                        <tr>
+                            <td>
+                                <br/><apex:outputText value="{!lstOppName.Name}"/> 
+                            </td>
+                            <td>
+                                <br/><apex:outputText value="{!lstOppName.StageName}"/>
+                            </td>
+                            <td>
+                                <br/><apex:outputText value="{!lstOppName.CloseDate}"/>
+                            </td>
+                        </tr>
+                        </apex:repeat>
+                    </tbody>
+                
+                    </table><br/>
+                </td>
+          
+                <td>
+                    <br/><apex:outputText value="{!lst.Phone}"/>
+                </td>
+            </tr>
+       </apex:repeat>
+    
+    </table>
+   
+     <script type="text/javascript">
+        console.log ( 'into script' );
+        $(document).ready(function() {
+            console.log ( 'into function' );
+            $.each($(".indextable"), function( key, table ) {
+                $(table).tablesorter();
+           });
+           
+            $(".indextable").tablesorter();
+        });
+        /*var TableIDvalue = "indextable";
+        console.log("1--->"+TableIDvalue);
+        
+        function SortTable() {
+            console.log("Into function--->");
+            var TableLastSortedColumn = -1;
+            var sortColumn = parseInt(arguments[0]);
+            console.log("2--->"+sortColumn);
+            var type = arguments.length > 1 ? arguments[1] : 'T';
+            
+            //var dateformat = arguments.length > 2 ? arguments[2] : '';
+            var table = document.getElementById(TableIDvalue);
+            var tbody = table.getElementsByTagName("tbody")[0];
+            var rows = tbody.getElementsByTagName("tr");
+            var arrayOfRows = new Array();
+            type = type.toUpperCase();
+            
+            for(var i=0, len=rows.length; i<len; i++) {
+                console.log("--->"+len);
+                arrayOfRows[i] = new Object;
+                arrayOfRows[i].oldIndex = i;
+                var celltext = rows[i].getElementsByTagName("td")[sortColumn].innerHTML.replace(/<[^>]*>/g,"");
+                if( type=='D') {
+                    console.log("Into 1st if--->");
+                    arrayOfRows[i].value = GetDateSortingKey(dateformat,celltext); 
+                }
+                else {
+                    console.log("Into 1st else--->");
+                    var re = type=="N" ? /[^\.\-\+\d]/g : /[^a-zA-Z0-9]/g;
+                    arrayOfRows[i].value = celltext.replace(re,"").substr(0,25).toLowerCase();
+                }
+            }
+            if (sortColumn == TableLastSortedColumn) {
+                console.log("Into 2nd if--->");
+                arrayOfRows.reverse();
+            }
+            else {
+                console.log("Into 2nd else--->");
+                TableLastSortedColumn = sortColumn;
+                switch(type) {
+                    case "N" : arrayOfRows.sort(CompareRowOfNumbers);break;
+                    case "D" : arrayOfRows.sort(CompareRowOfNumbers);break;
+                    default  : arrayOfRows.sort(CompareRowOfText);
+                }
+            }
+            var newTableBody = document.createElement("tbody");
+            for(var i=0, len=arrayOfRows.length; i<len; i++) {
+                console.log("Into for...")
+                newTableBody.appendChild(rows[arrayOfRows[i].oldIndex].cloneNode(true));
+            }
+            table.replaceChild(newTableBody,tbody);
+        }
+        function CompareRowOfText(a,b) {
+            console.log("Function for text called.");
+            var aval = a.value;
+            var bval = b.value;
+            return( aval == bval ? 0 : (aval > bval ? 1 : -1) );
+        }
+        function CompareRowOfNumbers(a,b) {
+            console.log("Function for Number called");
+            var aval = /\d/.test(a.value) ? parseFloat(a.value) : 0;
+            var bval = /\d/.test(b.value) ? parseFloat(b.value) : 0;
+            return( aval == bval ? 0 : (aval > bval ? 1 : -1) );
+        }*/
+    </script>
+
+</apex:page>

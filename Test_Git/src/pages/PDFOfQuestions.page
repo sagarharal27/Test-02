@@ -1,0 +1,46 @@
+<apex:page controller="GenerateTestPaper" renderAs="{!PdfData}" action="{!gettingID}">
+    <apex:form >
+        <h1>UNIT TEST</h1>  
+        <div align = "right">
+            <img src="{!$Resource.chanakyaClasses}" width="180" height="120" /><br/>
+            Chanakya Classes,Pune.
+        </div>
+        
+         Date :<apex:outputText value="{0,date,MMMM dd, yyyy}"><apex:param value="{!TODAY()}" />
+               </apex:outputText><br/>
+         Subject :<apex:outputText value="{!sub}"/><br/> 
+         Standard :<apex:outputText value="{!strStandard}"/><br/>
+         Total Marks : <apex:outputText value="{!strMarks}"/><br/>
+         
+         {!$Label.QustionPaperLine}
+         <h4>INSRUCTIONS:</h4>
+         {!$Label.QuestionPaperInstruction1}<br/>
+         {!$Label.QuestionPaperInstruction2}<br/>
+         {!$Label.QuestionPaperInstruction3}<br/>
+         {!$Label.QustionPaperLine}<br/>
+        
+        <apex:pageBlock >
+            <apex:pageBlockSection >
+                <apex:pageBlocktable value="{!qList}" var="que" columns="2">
+                    
+                    <apex:column headervalue="Questions of test">
+                        <br/><b>
+                        <apex:outputText value="{!IF(LEN(que.MCQ__c) > 0,'Que) '+que.MCQ__c,que.MCQ__c)}" /></b><br/>
+                        <br/><apex:outputText value="{!IF(LEN(que.MCQ__c) > 0,'a) '+que.Option_1__c,que.Option_1__c)}"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <br/><apex:outputText value="{!IF(LEN(que.MCQ__c) > 0,'b) '+que.Option_2__c,que.Option_2__c)}"/>
+                        <br/><apex:outputText value="{!IF(LEN(que.MCQ__c) > 0,'c) '+que.Option_3__c,que.Option_3__c)}"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <br/><apex:outputText value="{!IF(LEN(que.MCQ__c) > 0,'d) '+que.Option_4__c,que.Option_4__c)}"/>
+                        <br/><b>
+                        <apex:outputText value="{!IF(LEN(que.Theory_Question__c) > 0,'Que) '+que.Theory_Question__c,que.Theory_Question__c)}"/></b><br/>
+                    </apex:column>
+                    
+                    <apex:column headerValue="Marks">
+                        <apex:outputText value="{!que.marks__c}"/> 
+                    </apex:column>
+                    
+                </apex:pageBlocktable> 
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+     </apex:form>
+</apex:page>

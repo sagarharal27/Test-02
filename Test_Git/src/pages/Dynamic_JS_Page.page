@@ -1,0 +1,55 @@
+<apex:page >
+
+    <div id="dvTable">
+    </div>
+    <apex:form >
+        <apex:commandButton value="Call Script" onclick="CallSOQL();" reRender="false"/>
+    </apex:form>
+    
+    <script src="/soap/ajax/24.0/connection.js"></script>
+    <script src = "/soap/ajax/24.0/apex.js"></script>
+    <script  type="text/javascript">
+        sforce.connection.sessionId = '{!$Api.Session_ID}';
+    </script>
+    
+    <script>
+        function CallSOQL() {
+            var ObjectName = sforce.connection.query("SELECT dreamMap__Object_Name__c FROM dreamMap__DynamicTableOfObjects__c");
+            var records= ObjectName.getArray('records');
+            var count = records.length;
+            console.log('count',count);
+           
+            var displayArray = new Array();
+            displayArray.push(["Object Name","Record Count","Select"])
+            for(var i = 0; i < count; i++) {
+                var SObjectName = records[i].dreamMap__Object_Name__c;
+                var SObjectRecord = sforce.connection.query("SELECT id FROM " + SObjectName);
+                displayArray.push([SObjectName,SObjectRecord.size]);
+            }
+            
+            var table = document.createElement("TABLE");
+            table.border = "5";
+            table.width = "80%";
+            table.align = "center";
+            
+            var columnCount = displayArray[0].length;
+            var row = table.insertRow(-1);
+            
+            for (var i = 0; i < columnCount; i++) {
+                var headerCell = document.createElement("TH");
+                headerCell.innerHTML = displayArray[0][i];
+                row.appendChild(headerCell);
+            }
+            for (var i = 1; i < displayArray.length; i++) {
+                row = table.insertRow(-1);
+                for (var j = 0; j < columnCount; j++) {
+                    var cell = row.insertCell(-1); 
+                    cell.innerHTML = displayArray[i][j];
+                }
+            }
+            var dvTable = document.getElementById("dvTable");
+            dvTable.innerHTML = "";
+            dvTable.appendChild(table);
+        }
+    </script>
+</apex:page>

@@ -1,0 +1,105 @@
+<!-- https://c.ap2.visual.force.com/apex/generatetestpaper?nameOfSub=History -->
+
+<apex:page controller="GenerateTestPaper">
+    
+    <apex:form >
+        
+        <apex:messages id="msg"/>
+        <h2>Unit Test</h2> 
+        
+
+        
+        
+        <apex:pageBlock > 
+            <apex:pageBlocksection id="redSection" title="SElect Standard" columns="2">
+                
+                <apex:selectRadio value="{!strSubject}">
+                    <h2>Select Subject to Generate Test Paper :</h2>
+                    <apex:selectOptions value="{!allSubjects}"/><br/>
+                </apex:selectRadio><br/>
+                
+                <apex:commandButton id="b1" value="Show Marks Option" action="{!hideBlockOfMarks}" />
+                
+            </apex:pageBlocksection> 
+        </apex:pageBlock>
+        
+        <apex:pageBlock id="mrk" rendered="{!hideMarks}">
+            <apex:pageBlocksection title="Select Marks" columns="2">
+                
+  
+                <apex:selectRadio value="{!strMarks}">
+                    <h2>Select Marks to Generate Test Paper :</h2>
+                    <apex:selectOptions value="{!OptionsForMarks}"/><br/>
+                </apex:selectRadio><br/>
+                
+                <apex:commandButton id="b2" value="Show Chapter" action="{!hideBlockOfChapter}" />
+            </apex:pageBlocksection> 
+        </apex:pageBlock>
+         
+        <apex:pageBlock id="pb1" rendered="{!hideChapter}"> 
+            <apex:pageBlockSection title="Select Chapter">
+                
+                <apex:selectList value="{!listholdChapter}" id="a2"  multiselect="true" size="3"> 
+                    <apex:selectOptions value="{!allChapter}" /> 
+                </apex:selectList><br/>
+                
+                <apex:commandButton value="Show Topics" action="{!hideBlockOfTopics}" /> 
+            </apex:pageBlockSection>
+        </apex:pageBlock>  
+          
+        <apex:pageBlock rendered="{!hideTopic}" id="pb2"> 
+            <apex:pageBlockSection title="Select Topic">
+                
+                <apex:selectList value="{!listHoldTopic}" id="a3"  multiselect="true" size="3" > 
+                    <apex:selectOptions value="{!allTopic}" /> 
+                </apex:selectList><br/>
+                
+                <apex:commandButton value="Show Questions" action="{!getQueList}" />
+            </apex:pageBlockSection>
+        </apex:pageBlock> 
+ 
+        <apex:pageBlock id="pb4" rendered="{!hideQue}">
+            <apex:pageBlockSection title="Select Questions">
+                <apex:pageBlockTable value="{!wrapList}" var="war">
+                    
+                    <apex:column headerValue="Select Questions">
+                           <apex:inputCheckBox value="{!war.blSelect}" onchange="checkTick('{!war}')" styleClass="checkQue">
+                        </apex:inputCheckBox>
+                   </apex:column>
+                    
+                    <apex:column headerValue="Questions">
+                        <apex:outputField value="{!war.que.MCQ__c}"/>
+                        <apex:outputField value="{!war.que.Theory_Question__c}"/>
+                    </apex:column>
+                    
+                    <apex:column headerValue="Marks per Questions">
+                        <apex:outputField value="{!war.que.marks__c}"/>
+                    </apex:column> 
+                    
+                </apex:pageBlockTable> 
+           </apex:pageBlockSection>
+        </apex:pageBlock> 
+
+        
+       
+            <apex:commandButton value="Generate Question Paper" action="{!generatePdf}" >
+                <apex:actionSupport event="onclick" action="{!getSelectedFromWrapper}" rerender="other_block" />
+           </apex:commandButton>
+                
+            <apex:commandButton value="Generate Answer Sheet" action="{!generateAnswersPdf}" />
+                <apex:actionSupport event="onclick" action="{!getSelectedFromWrapper}" rerender="other_block"/>
+       
+            <apex:actionFunction name="checkTick" action="{!validationOfMarks}" oncomplete="tempFunction({!tempAlert});">
+                <apex:param value="" name="wrapperId" ></apex:param>  
+            </apex:actionFunction>
+    </apex:form>
+    <script>  
+    function tempFunction(temp) {
+        
+        console.log('Temp : ' + temp);
+        if(temp === true) {
+            alert("No of questions are exeeded.");
+        }
+    }
+</script> 
+</apex:page>

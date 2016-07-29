@@ -1,0 +1,36 @@
+<apex:page standardcontroller="Opportunity" tabstyle="Opportunity">
+    <apex:form >
+    <apex:sectionheader title="Opportunity Edit" subtitle="{!if(Opportunity.Id==null,'New Opportunity',Opportunity.Name)}"/>
+    
+    <apex:pageblock mode="edit" id="leadPB" title="Lead Edit">
+        <apex:pageblockbuttons >
+            <apex:commandbutton action="{!save}" value="Save"/>
+            <apex:commandbutton action="{!cancel}" value="Cancel"/>
+        </apex:pageblockbuttons>
+        
+        <apex:pagemessages />
+ 
+        <apex:pageblocksection id="OppInformationPBS" title="Opportunity Information">
+            <apex:inputfield value="{!Opportunity.OwnerId}"/>
+            <apex:inputfield value="{!Opportunity.Amount}"/>
+            <apex:inputfield value="{!Opportunity.Name}"/>
+            <apex:inputfield value="{!Opportunity.NextStep}"/>
+            <apex:inputfield value="{!Opportunity.Type}"/>
+            <apex:inputfield value="{!Opportunity.StageName}"/>
+            <apex:inputfield value="{!Opportunity.LeadSource}"/>
+        </apex:pageblocksection>
+        
+        <apex:pageblocksection id="AdditionalInformationPBS" title="Additional Information">
+            <apex:inputfield value="{!Opportunity.OrderNumber__c}"/>
+            <apex:inputfield value="{!Opportunity.MainCompetitors__c}"/>
+            <apex:inputfield value="{!Opportunity.TrackingNumber__c}"/>
+            <apex:inputfield value="{!Opportunity.DeliveryInstallationStatus__c}"/>
+        </apex:pageblocksection>
+        
+        <apex:pageblocksection id="DescriptionInformationPBS" title="Description Information">
+            <apex:inputfield value="{!Opportunity.Description}"/>
+        </apex:pageblocksection>
+        
+    </apex:pageblock>
+    </apex:form>
+</apex:page>

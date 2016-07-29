@@ -1,0 +1,406 @@
+<apex:page controller="Addmultiplechildrecordscontroller" tabStyle="Account" sidebar="false">
+   <style>
+    .headerRow{
+         //padding-left: 30px !important;
+         //padding-right: 30px !important;
+    }
+    #assign-action-spinner-main {
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color:rgba(0,0,0,.6);
+            height: 100%;
+            width: 100%;
+            z-index: 999;
+            align: center;
+            vertical-align: middle;
+        }
+        #assign-action-spinner-content {
+            position: absolute; 
+            top: 50%;
+            left: 50%;
+            z-index: 1000;
+            background-color: #F5FCFF;
+            width: 204;
+            height: 94; 
+            border-radius: 1em;
+            border: 1px solid #CEECFF;
+            padding: 20px 40px 20px 40px;
+            margin-left: -116px;
+            margin-top: -36px;
+        }
+        #assign-action-spinner-content img {
+            width: 32;
+            height: 32;
+            align: center;
+            vertical-align: middle;
+        }
+        
+        #assign-action-spinner-content p {
+            display: inline;
+            font-size: 135%;
+            font-weight: bold;
+        } 
+        
+        .helpButton .helpOrb {
+           background-position: right !important;
+         }
+        
+         .imgclass:hover{   
+            background-image: url(/img/help/helpOrbs.gif);   
+            background-repeat: no-repeat;   
+            width: 16px;   
+            height: 15px;      
+            background-position: right;   
+          
+        }   
+        .imgclass{   
+            background-image: url(/img/help/helpOrbs.gif);   
+            background-repeat: no-repeat;   
+            width: 16px;   
+            height: 15px; 
+            margin-right: 0px;
+            background-position: right;     
+        }   
+        
+        
+        th {
+            text-align: left;
+            font-weight: bold;
+            white-space: normal !important;
+        }
+
+       .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted White;
+            
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 140px;
+            background-color: #fefdb9;
+            border: 1px solid orange;
+            font-weight: normal;
+            color: Black;
+            text-align: left;
+            border-radius: 0px;
+            padding: 5px 5px;
+            //top: -40px;
+            margin-top: 7px;
+            left: -50px;
+            word-wrap: break-word !important;
+            
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+            
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }       
+</style>
+    
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+    
+    <apex:sectionHeader title="Add Multiple {!objSetting.Child_Display_Name__c} Records" rendered="{!NOT(ISNULL(objSetting.Child_Display_Name__c))}"/>
+     <apex:sectionHeader title="Add Multiple {!objSetting.Child_Sobject_Name__c} Records" rendered="{!IF(objSetting.Child_Display_Name__c==null,true,false)}"/>
+    <apex:form >
+        <apex:pageMessages rendered="{!isVisible}" id="errorMessage" escape="false"/>
+        <p style="Margin-left:20px">
+            
+            <apex:commandLink value="Click here"  action="{!cancelItem}" rendered="{!isVisible}" immediate="true"/>
+            <apex:outputLabel rendered="{!isVisible}">to return.  </apex:outputLabel>
+        </p>
+        <apex:pageBlock rendered="{!isPageVisible}"  title="{!objSetting.Parent_Section_Title__c}"  >
+        <apex:pageBlockSection columns="2" collapsible="false">
+              
+            <apex:repeat value="{!sObjectList}" var="objAccount">
+                
+                <apex:repeat value="{!listparentFieldSetMember}" var="fieldName">
+                    
+                    <apex:facet name="header" >
+                        {!fieldName.Label}
+                    
+                        <span class="tooltip">
+                                          
+                            <!-- Displyaing image for HelpText symbol -->
+                            <img src="/s.gif" class="imgclass"/>
+                                            
+                            <!-- Displaying HelpText for corresponding fields -->   
+                            <span class="tooltiptext">   
+                                {!mapParentFieldApi_HelpText[fieldName.FieldPath]}
+                            </span>   
+                                           
+                        </span>
+                                          
+                    </apex:facet>
+                    <apex:outputField value="{!objAccount[fieldName.FieldPath]}" />
+                
+                </apex:repeat>
+                
+            </apex:repeat>
+            <br/>
+  
+        </apex:pageBlockSection>
+        </apex:pageBlock>
+        <!-- End of the first ParentDetail PageBlockSection -->
+           
+            <!-- Begining of the child record Addition Section -->
+      <apex:pageBlock rendered="{!isPageVisible}" title="{!objSetting.Child_Section_Title__c}" id="newChildContactBlockID">     
+           <apex:actionRegion >
+            <apex:pageBlockSection columns="1" id="addChildSection" collapsible="false">
+                
+                  <apex:outputText value="{!mapChildFieldApi_HelpText['FirstName']}"/> 
+               
+                <!--<apex:pageMessages ></apex:pageMessages> -->
+                <apex:pageMessage summary="{!$Label.Add_the_Child_Records}"
+                                            severity="info" rendered="{!! if(createNewSobjectList.size > 0, true, false)}" strength="3"/> 
+                <apex:pageMessage summary="{!$Label.File_Uploaded_Message} ({!createNewSobjectList.size} {!if(createNewSobjectList.size == 1,'Record','Records')})."
+                                            severity="info" rendered="{!isFileUploaded}" strength="3"/> 
+                <apex:outputPanel >
+                    <apex:variable var="rowNum" value="{!0}"  />
+                    <apex:pageBlockTable value="{!createNewSobjectList}" var="objParentChildInsertObject" rendered="{!if(createNewSobjectList.size > 0,true,false)}" >
+                        <apex:column headerValue="Action">
+                            <apex:commandLink value="Remove" action="{!removeItem}" id="removeLink2"   status="status" title="Remove this line item" immediate="true">
+                                <apex:param value="{!objParentChildInsertObject.iRecNo}" name="pIndex" />
+                            </apex:commandLink>&nbsp;|&nbsp;
+                            <apex:commandLink value="Clone" status="status"  action="{!addCloneChildRecord}">
+                               <apex:param value="{!objParentChildInsertObject.iRecNo}" name="rowCount" assignTo="{!assignedRowNumber}"/>
+                           </apex:commandLink>
+                        </apex:column>
+                        
+                        <!-- Section to show column headers and values -->
+                        <apex:repeat value="{!listChildFieldSetMember}" var="objchildFieldsString" id="repeatId">
+                            
+                            <apex:column >
+                                
+                                <!-- Section to show column headers and values --> 
+                                <apex:facet name="header" >
+                                     
+                                    <!-- Dispaying Column headers on page -->
+                                    {!objchildFieldsString.Label}
+                                    <span class="tooltip">
+                                          
+                                        <!-- Displyaing image for HelpText symbol -->
+                                        <img src="/s.gif" class="imgclass"/>
+                                            
+                                        <!-- Displaying HelpText for corresponding fields -->   
+                                        <span class="tooltiptext">                                                              
+                                            {!mapChildFieldApi_HelpText[objchildFieldsString.FieldPath]}
+                                        
+                                        </span>   
+                                           
+                                    </span>
+                                          
+                                </apex:facet>
+                                        
+                                <apex:inputField value="{!objParentChildInsertObject.objCreateSobject[objchildFieldsString.FieldPath]}" required="{!OR(objchildFieldsString.required, objchildFieldsString.dbrequired)}"/>
+                          
+                            </apex:column>
+                            
+                        </apex:repeat>
+        
+                    </apex:pageBlockTable>
+                </apex:outputPanel>
+               
+            </apex:pageBlockSection>
+       
+            <!-- End of the child Record Addtion Section -->
+           
+            <!-- Begining of the Child Record Addition Button Part -->   
+           
+           
+                
+                <apex:outputPanel style="padding-left: 1em;">
+                    <div class="menuButton" id="actions" style="margin-left: 300px;">
+                        <apex:outputPanel layout="none">
+                            <div class="menuButtonButton" id="actionsButton"><span class="menuButtonLabel" id="actionsLabel">Add Rows</span></div>
+                            <div class="menuButtonMenu" id="actionsMenu">
+                                <apex:outputPanel layout="none">
+                                    <apex:commandLink value="1 Row" action="{!createNewChildRecord}" status="status" immediate="true">
+                                        <apex:param value="1" name="pAddrowNumber" />
+                                    </apex:commandLink>
+                                    <apex:commandLink value="3 Rows" action="{!createNewChildRecord}" status="status" immediate="true">
+                                        <apex:param value="3" name="pAddrowNumber" />
+                                    </apex:commandLink>
+                                    <apex:commandLink value="5 Rows" action="{!createNewChildRecord}" status="status" immediate="true">
+                                        <apex:param value="5" name="pAddrowNumber" /> 
+                                    </apex:commandLink>
+                                </apex:outputPanel>
+                            </div>
+                        </apex:outputPanel>
+                    </div>
+                </apex:outputPanel>
+                 
+                <script type="text/javascript"> new MenuButton('actions', false); </script> <span style="width:3px"/>
+               
+                <apex:commandButton value="Quick Save" action="{!quickSaveChildRecords}" status="status" reRender="newChildContactBlockID"/>
+                <apex:commandButton value="Save" action="{!saveChildObject}" status="status" reRender="newChildContactBlockID"/>
+                <apex:commandButton value="Cancel" action="{!cancelItem}" immediate="true" status="status" />
+                <apex:commandButton value="Download Template" action="{!exportDetailReport}" style="padding-left: 1em;" immediate="true" status="status" rendered="{!objSetting.Is_Include_Csv__c}"/>
+               
+              <!--  <apex:outputPanel >-->
+                    <apex:commandButton value="Insert Uploaded Records" action="{!importCSVFile}" immediate="true" status="status" rendered="{!objSetting.Is_Include_Csv__c}"/>
+                    </apex:actionRegion>
+                    <apex:inputFile value="{!csvFileBody}" filename="{!csvAsString}" rendered="{!isFileVisible && objSetting.Is_Include_Csv__c}"/>
+                <!--</apex:outputPanel>-->
+           
+        </apex:pageBlock>
+           <!-- End of the button Part for the addtion of the records -->
+           
+           <!-- Begining of the child records Deletion part -->
+           <apex:pageBlock rendered="{!isPageVisible}" title="{!objSetting.Existing_Child_Records_Title__c}">
+           <apex:pageBlockSection columns="1"  collapsible="false" id="pageBlockId">
+               <apex:outputPanel id="deleteErrorMessage">
+                    <apex:pageMessages rendered="{!isDeleterMessage}"/>
+               </apex:outputPanel>
+              
+                <apex:actionRegion >
+                 
+                   <apex:outputPanel id="panelId" style="overflow:scroll;height:250px;" layout="block">
+                         
+                        <apex:pageMessage summary="{!$Label.Empty_Existing_Child_Records}"
+                                            severity="info" rendered="{!! if(childDataList.size >0,true,false)}" strength="3"/> 
+                            
+                            
+                            <apex:pageBlockTable id="tableId" value="{!childDataList}" var="objParentChildObject" rendered="{!if(childDataList.size >0,true,false)}" style="height:20px;">
+                          
+                                <apex:column headerValue="Action">
+                                    <apex:commandLink onclick="deleteRecord('{!objParentChildObject.objChildSobject.Id}')" status="status"  value="Delete" title="Delete this record" oncomplete="return false;" rendered="{!!objParentChildObject.editRecord}"/>
+                                    &nbsp;
+                                    <apex:commandLink action="{!editChildFieldset}" value="Edit" title="Edit this Record" status="status" reRender="panelId"  rendered="{!!objParentChildObject.editRecord}">
+                                        <apex:param name="firstParam" value="{!objParentChildObject.rowIndexNo}" assignTo="{!rowIndex}" />
+                                    </apex:commandLink>
+                                   
+                                    <apex:commandLink action="{!saveChildFieldset}" value="Save" title="Save this Record" status="status" rendered="{!objParentChildObject.editRecord}" reRender="tableId" onComplete="hideToolTipForHeader()">
+                                        <apex:param name="firstParam" value="{!objParentChildObject.rowIndexNo}" assignTo="{!rowIndex}" />
+                                    </apex:commandLink>
+                                    &nbsp;
+                                    <apex:commandLink action="{!cancelChildFieldset}" value="Cancel" title="Cancel this Record"  rendered="{!objParentChildObject.editRecord}" reRender="panelId" immediate="true"  status="status">
+                                      <apex:param name="firstParam" value="{!objParentChildObject.rowIndexNo}" assignTo="{!rowIndex}" />
+                                      
+                                    </apex:commandLink>  
+                                </apex:column>
+                                
+                                <!-- Section to show column headers and values -->
+                                <apex:repeat value="{!listChildFieldSetMember}" var="objFieldsString">
+                                    <apex:column >
+                                       
+                                        <!-- Section to show column headers and values --> 
+                                        <apex:facet name="header">
+                                            
+                                            <!-- Dispaying Column headers on page-->
+                                            {!objFieldsString.Label}
+                                        
+                                                <span class="tooltip">
+                                                    
+                                                    <!-- Displyaing image for HelpText symbol -->
+                                                    <img src="/s.gif" Class="imgclass"/>
+                                                    
+                                                    <!-- Displaying HelpText for corresponding fields -->   
+                                                    <span class="tooltiptext">
+                                                        {!mapChildFieldApi_HelpText[objFieldsString.FieldPath]}
+                                                    </span>
+        
+                                                 </span>
+                                        
+                                        </apex:facet>
+                                        
+                                        <apex:outputField value="{!objParentChildObject.objChildSobject[objFieldsString]}" rendered="{!!objParentChildObject.editRecord}" />
+                                        <apex:inputField value="{!objParentChildObject.objChildSobject[objFieldsString]}" rendered="{!objParentChildObject.editRecord}"/>
+                                        
+                                    </apex:column>
+                                </apex:repeat>
+                                
+                            </apex:pageBlockTable>
+                        
+                        <script>
+                            hideToolTipForHeader();
+                        </script>    
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel id="hiddenBlock" rendered="false"></apex:outputPanel>
+                    <apex:actionFunction name="displayDeleteOutput" action="{!displayDeleteChildMessage}" status="status"  reRender="panelId"/>
+                    <apex:actionFunction name="deleteSelectedRecord" action="{!displayDeletionMessage}" status="status"  onComplete="showDeletePanel()" reRender="deleteErrorMessage" >
+                     <apex:param value=" " name="pErrorMessage"  />
+                    </apex:actionFunction> 
+                </apex:actionRegion>
+           </apex:pageBlockSection>
+           
+           <!-- End of the child Deletion part -->
+          
+        </apex:pageBlock>
+        
+        <!--  For display the waiting status  of the page  -->
+        
+        <apex:outputpanel >
+            <apex:actionStatus id="status" layout="block">
+               <apex:facet name="start">
+                 <div id="assign-action-spinner-main">
+                    <div id="assign-action-spinner-content">
+                    <img src="/img/analytics/reportbuilder/icons/spinner32.gif" alt="Processing..." title="Processing..." /> 
+                    <p>Processing...</p>
+                 </div>
+                </div>
+              </apex:facet>
+            </apex:actionStatus>
+        </apex:outputpanel>
+        
+        <!-- End of the waiting status of the page -->
+        
+    </apex:form>
+    
+    <script type="text/javascript">
+        
+        hideToolTipForHeader();
+        
+        
+        j$ = jQuery.noConflict();
+       
+        // A function to display the child section when the record is deleted form the page.
+        function showDeletePanel(){
+            
+            displayDeleteOutput();
+        
+        }
+       
+        // A function to delete the record from the child section and display the error message .
+        function deleteRecord(pDelRecordId){
+            var errorMessage ;
+            
+            if(confirm("{!$Label.Delete_childRecord_Confrim}") == true){               
+                 Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.Addmultiplechildrecordscontroller.deleteChildRecord}',
+                 pDelRecordId,
+                '{!objSetting.Child_Sobject_Name__c}', 
+                 function(result, event) {
+                    if (event.status) {
+                       errorMessage = (result != 'true')?result:'{!$Label.Record_Delete_Confirmation}'
+                       deleteSelectedRecord(errorMessage+'');
+                    }
+                }, {escape: true}
+            );
+           } //if  
+           
+           return false; 
+        }
+        
+        // Function to hide toottip(HelText) for a field which is not having HelpText
+        function hideToolTipForHeader() {
+            j$ = jQuery.noConflict();
+            console.log('into function');
+            var a=[];
+            a=j$('.tooltip .tooltiptext');
+            
+            for(var i=0; i<a.length;i++){
+                if(a[i].textContent.trim() == ''){
+                   // j$(a[i]).removeClass( "tooltiptext");
+                   j$(a[i]).parent().remove();
+                }
+            }
+        }
+    </script>
+</apex:page>

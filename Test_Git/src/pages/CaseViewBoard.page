@@ -1,0 +1,58 @@
+<apex:page standardController="Case" recordSetVar="cases" sidebar="false">
+    <apex:pageBlock title="Cases">
+        <apex:form id="theForm">
+            <apex:panelGrid columns="2">
+                <apex:outputLabel value="Select: "/>
+                <apex:selectList value="{!filterId}" size="1">
+                    <apex:actionSupport event="onchange" reRender="List"/>
+                    <apex:selectOptions value="{!listviewoptions}"/>
+                </apex:selectList>
+            </apex:panelGrid>
+            
+<!--             <apex:pageBlockSection> -->
+                <apex:pageBlockTable value="{!cases}" var="c" id="List">
+                        <apex:column value="{!c.AccountId}"/>
+                        <apex:column value="{!c.contactId}"/>
+                        <apex:column value="{!c.Status}"/>
+                        <apex:column value="{!c.Origin}"/>
+                        <apex:column value="{!c.Priority}"/>
+                </apex:pageBlockTable>
+<!--             </apex:pageBlockSection> -->
+            
+<!--             <apex:pageBlockSection> -->
+                <table style="width:100%" >
+                    <tr> 
+                        <td>
+                            Page: <apex:outputText value=" {!PageNumber} of {!CEILING(ResultSize/PageSize) }"/>
+                        </td>
+
+                        <td align="center">
+                            <apex:commandButton rendered="{!HasPrevious}" disabled="{!!HasPrevious}" action="{!First}" value="First"/>
+                        
+                            <!-- Previous page -->
+                            <apex:commandButton action="{!Previous}" value="« Previous" rendered="{!HasPrevious}"/>
+                            <apex:outputText style="color: #ccc;" value="« Previous" rendered="{!NOT(HasPrevious)}"/>
+                            &nbsp;&nbsp;
+                            
+                            <!-- Next page -->
+                            <apex:commandButton action="{!Next}" value="Next »" rendered="{!HasNext}"/>
+                            <apex:outputText style="color: #ccc;" value="Next »" rendered="{!NOT(HasNext)}"/>
+                            
+                            <apex:commandButton rendered="{!HasNext}" disabled="{!!HasNext}" action="{!Last}" value="Last"/>
+                        </td>
+                        
+                        <td align="right">
+                            Records per page:
+                            <apex:selectList value="{!PageSize}" size="1">
+                                <apex:selectOption itemValue="5" itemLabel="5"/>
+                                <apex:selectOption itemValue="20" itemLabel="20"/>
+                                <apex:actionSupport event="onchange" reRender="List"/>
+                            </apex:selectList>
+                        </td>
+                    </tr>
+                </table>
+<!--             </apex:pageBlockSection> -->
+       
+       </apex:form>
+    </apex:pageBlock>
+</apex:page>

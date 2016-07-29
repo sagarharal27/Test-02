@@ -1,0 +1,200 @@
+<apex:page showHeader="true" controller="CharketFree.ServiceChatController" sidebar="false">
+    <apex:includeScript value="{!URLFOR($Resource.CharketFree__Streaming,'jquery-1.5.1.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.CharketFree__Streaming, 'cometd.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.CharketFree__Streaming, 'jquery.cometd.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.CharketFree__Streaming, 'json2.js')}"/>
+
+    <style type="text/css">
+        .message-panel{
+            height: 250px;
+            width: 100%;
+            margin-right: auto;
+            margin-left: auto;
+            overflow:auto;
+            border:1px solid #909698;
+            background:#F5F8F9;
+            border-radius: 3px
+        }
+        .chat-panel{
+            width:400px;
+            border:1px solid #a5b6c8;
+            background:#EAEDEF;
+            padding: 5px;
+        }
+        .send-btn{
+            float: right;
+            color: rgb(255, 255, 255);
+            font-size: 16px;
+            padding-top: 32px;
+            padding-bottom: 35px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-width: 1px;
+            border-color: rgb(197, 229, 145);
+            border-style: solid;
+            border-radius: 2px;
+            background-color: rgb(120, 195, 0);
+            margin-right: 5px;
+        }
+        .input-panel{
+            width: 80%;
+            border-radius: 3px;
+            border:1px solid #909698;
+        }
+        .follow-name{
+            font-weight: 600;
+        }
+        .chat-header{
+            width: 98%;
+            margin: 5px 5px 5px 5px;
+        }
+        .action-panel{
+            float: right;
+        }
+        .chat-div{
+            width: 50%;
+            float: left;
+            margin-left: 20px;
+        }
+        .lead-info{
+            width: 45%;
+            float: right;
+            margin-right: 20px;
+        }
+        .contact-info{
+            width: 45%;
+            float: right;
+            margin-right: 20px;
+        }
+    </style>
+    <apex:form >
+        <apex:sectionHeader title="Charket" subtitle="Chat" />
+        <div class="chat-div">
+            <apex:pageBlock title="Live Chat" rendered="{!CurrentMessage != null}">
+                <div class="chat-panel">
+                    <div class="chat-header">
+                        Chatting with <span class="follow-name">{!CurrentMessage.CharketFree__TargetName__c}</span>
+                        <div class="action-panel">
+                            <apex:outputLink onclick="closeChat()">Close Chat</apex:outputLink>
+                         |&nbsp;
+                            <apex:outputLink value="/500/e" target="_blank">New Case</apex:outputLink>
+                        </div>
+                    </div>
+                    <div class="message-panel" id="chatPanel">
+                    </div>
+                    <br></br>
+                    <apex:inputTextarea id="inputPanel" rows="6" styleClass="input-panel"/>
+                    <input type="button" align="right" onclick="sendMessage()" id="outputContent" value="Send" class="send-btn" style="cursor: pointer;" />
+                </div>
+            </apex:pageBlock>
+            <apex:pageBlock rendered="{!CurrentMessage == null}">
+                <apex:pageBlockSection >
+                <apex:outputLabel value="The session does not exist."/>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </div>
+        <div class="lead-info">
+            <apex:pageBlock title="Lead Information" rendered="{!CurrentLead != null}">
+                <apex:pageBlockSection columns="1">
+                        <apex:outputField value="{!CurrentLead.Name}"/>
+                        <apex:outputField value="{!CurrentLead.OwnerId}"/>
+                        <apex:outputField value="{!CurrentLead.Industry}"/>
+                        <apex:outputField value="{!CurrentLead.CharketFree__WeChatNickName__c}"/>
+                        <apex:outputField value="{!CurrentLead.CharketFree__IsFollowing__c}"/>
+                        <apex:outputField value="{!CurrentLead.CharketFree__Gender__c}"/>
+                        <apex:outputField value="{!CurrentLead.CharketFree__SubscribeTime__c}"/>
+                        <apex:outputField value="{!CurrentLead.Phone}"/>
+                        <apex:outputField value="{!CurrentLead.Email}"/>
+                        <apex:outputField value="{!CurrentLead.CharketFree__ProductInterest__c}"/>
+                        <apex:outputField value="{!CurrentLead.CharketFree__Language__c}"/>
+                        <apex:outputField value="{!CurrentLead.CharketFree__WeChatProfilePhoto__c}"/>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </div>
+        <div class="contact-info">
+            <apex:pageBlock title="Contact Information" rendered="{!CurrentContact != null}">
+                <apex:pageBlockSection columns="1">
+                        <apex:outputField value="{!CurrentContact.Name}"/>
+                        <apex:outputField value="{!CurrentContact.OwnerId}"/>
+                        <apex:outputField value="{!CurrentContact.AccountId}"/>
+                        <apex:outputField value="{!CurrentContact.Department}"/>
+                        <apex:outputField value="{!CurrentContact.Email}"/>
+                        <apex:outputField value="{!CurrentContact.Phone}"/>
+                        <apex:outputField value="{!CurrentContact.CharketFree__Languages__c}"/>
+                        <apex:outputField value="{!CurrentContact.CharketFree__Level__c}"/>
+                        <apex:outputField value="{!CurrentContact.Birthdate}"/>
+                        <apex:outputField value="{!CurrentContact.CharketFree__WeChatAccount__c}"/>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </div>
+    </apex:form>
+
+    <script type="text/javascript">
+        
+        var currentFollower = "{!CurrentFollowerOpenId}";
+        var CurrentFollowerName = "{!CurrentMessage.CharketFree__TargetName__c}";
+        var CurrentWeChatAccountId = "{!CurrentMessage.WeChatAccount__r.CharketFree__WeChatId__c}";
+        var leadId = "{!CurrentleadId}";
+        var packageName = "{!PackageName}" + '__';
+
+        $(document).ready(function() {
+            // Connect to the CometD endpoint
+            $.cometd.init({
+                    url: window.location.protocol+'//'+window.location.hostname+'/cometd/24.0/',
+                    requestHeaders: { Authorization: 'OAuth {!$Api.Session_ID}'}
+                });
+
+                // Subscribe to a topic. JSON-encoded update will be returned
+                // in the callback
+            $.cometd.subscribe('/topic/CharketPushTopic', function(message) {
+                 console.log(message);
+                var userName = JSON.stringify(message.data.sobject[packageName + 'TargetName__c']).replace(/"/g,"");
+               
+                if(CurrentFollowerName == userName){
+                    var modifyUserId = JSON.stringify(message.data.sobject.LastModifiedById).replace(/"/g,"");
+                    if(modifyUserId == "{!$User.Id}"){
+                        userName = "{!$User.FirstName} {!$User.LastName}";
+                    }
+                    var headtitle = userName + "  " + new Date().toLocaleString();
+                    var message = JSON.stringify(message.data.sobject[packageName + 'MessageContent__c']).replace(/"/g,"").replace(/\\n/, "</br>");
+                    var inboundMessage = popMessage(headtitle, message);
+                    $('[id*=chatPanel]').append(inboundMessage);
+                    document.getElementById('chatPanel').scrollTop = document.getElementById('chatPanel').scrollHeight;
+                }
+            });
+        });
+
+        function popMessage(name, content){
+            var messageContent = "<div><span>"
+                                 + name
+                                 + "</span></br><span style=\"color: #8B2323\">"
+                                 + content
+                                 + "</span><br></br><div>";
+            return messageContent;
+        }
+
+        function sendMessage(){
+            CharketFree.ServiceChatController.sendMessage(CurrentWeChatAccountId, $('[id*=inputPanel]').val(),currentFollower,leadId, function(result, event){
+                if(event.status){
+                    if(result != null)
+                    {
+                        alert(result);
+                    }
+                    $('[id*=inputPanel]').val('');
+                }
+            },{escape:false});
+         }
+
+        function closeChat(){
+            CharketFree.ServiceChatController.closeChat(currentFollower, function(result, event){
+                if(event.status){
+                    alert("The session closed！");
+                }
+            },{escape:false});
+        }
+        if({!$User.Id != CurrentMessage.LastModifiedById})
+        {
+            $('[id*=chatPanel]').append(popMessage(CurrentFollowerName + "  {!LastMessageTime}", "{!CurrentMessage.CharketFree__MessageContent__c}"));
+        }
+    </script>
+</apex:page>

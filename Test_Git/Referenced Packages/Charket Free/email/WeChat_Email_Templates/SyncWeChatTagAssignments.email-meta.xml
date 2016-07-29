@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Sync WeChat Tags</name>
+    <style>none</style>
+    <subject>[Charket] Notifications from the WeChat account for the sync WeChat Tag</subject>
+    <textOnly>Action Email
+
+Your request to sync WeChat Tags was completed. All WeChat Tags have been created in your Salesforce org.</textOnly>
+    <type>custom</type>
+</EmailTemplate>

@@ -1,0 +1,41 @@
+<apex:page controller="SOQL_freeTimeWrapper" docType="html-5.0">
+    <apex:form >
+        <html>
+        <style>
+            .pageBlockCss {
+                border-collapse:collapse;
+            }
+           
+        </style>
+        </html>  
+        
+    
+        <table border="1" class="pageBlockCss">
+            <thead>
+               
+                <apex:repeat value="{!lstWrapperClient}" var="initialVar">
+                     <tr>
+                        <td >
+                            <apex:outputText value="{!initialVar.clientInstance.Name}"/>
+                        </td>
+                        
+                        <apex:repeat value="{!initialVar.lstProjectWrapper}" var="innerKey">
+                            <td>
+                                <apex:outputText value="{!innerKey.projectInstance.Name}"/> 
+                            </td>
+                                
+                                <apex:repeat value="{!innerKey.lstWorkWrapper}" var="innnerMostKey">
+                                    <td>
+                                        <apex:outputText value="{!innnerMostKey.Name}"/>
+                                    </td>
+                                </apex:repeat>
+                            
+                        </apex:repeat>
+                        
+                   </tr>
+                </apex:repeat>
+                 
+            </thead>
+        </table>
+    </apex:form>
+</apex:page>

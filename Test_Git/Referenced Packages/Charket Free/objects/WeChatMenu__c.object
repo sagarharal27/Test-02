@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Follow</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>false</enableReports>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Key__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The key used to match a WeChat message.</inlineHelpText>
+        <label>Key</label>
+        <length>128</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>OrderNumber__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>The bigger the number of first menu, the more backward the menu is. The smaller the number of secondary menu, the topper the menu is.</inlineHelpText>
+        <label>Order Number</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ParentMenu__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Parent Menu Item</label>
+        <referenceTo>WeChatMenu__c</referenceTo>
+        <relationshipLabel>WeChat Menu Items</relationshipLabel>
+        <relationshipName>SubMenus</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ResposeMessage__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Message Template</label>
+        <referenceTo>WeChatMaterial__c</referenceTo>
+        <relationshipLabel>WeChat Menu Items</relationshipLabel>
+        <relationshipName>WeChatMenuItems</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>LOWER(RecordType.Name)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Type</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>URL__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Please make sure the &quot;URL&quot; start with &quot;http://&quot; or &quot;https://&quot;.</inlineHelpText>
+        <label>URL</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>WeChatAccount__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>WeChat Account</label>
+        <referenceTo>WeChatAccount__c</referenceTo>
+        <relationshipName>WeChat_Menus</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>WeChatMenu2__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>WeChat Menu</label>
+        <referenceTo>WeChatMenu2__c</referenceTo>
+        <relationshipLabel>WeChat Menu Items</relationshipLabel>
+        <relationshipName>WeChatMenuItems</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <label>WeChat Menu Item</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>OrderNumber__c</columns>
+        <columns>ParentMenu__c</columns>
+        <columns>Type__c</columns>
+        <columns>WeChatAccount__c</columns>
+        <columns>WeChatMenu2__c</columns>
+        <columns>CREATEDBY_USER</columns>
+        <columns>ResposeMessage__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <label>WeChat Menu Name</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>WeChat Menu Items</pluralLabel>
+    <recordTypes>
+        <fullName>Click</fullName>
+        <active>true</active>
+        <description>This type of menu item needs specify a key value and a material, the key is used to find the material, and the material is used to response message to user who click this menu item.</description>
+        <label>Click Menu</label>
+    </recordTypes>
+    <recordTypes>
+        <fullName>View</fullName>
+        <active>true</active>
+        <description>This type of menu item need to specify a url, when user click the view  type menu, page will link to the url you filled.</description>
+        <label>View Menu</label>
+    </recordTypes>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>ParentMenu__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Type__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>WeChatAccount__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>ResposeMessage__c</lookupDialogsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>Check_URL_Start</fullName>
+        <active>true</active>
+        <errorConditionFormula>NOT(BEGINS(URL__c, &apos;http&apos;)) &amp;&amp; Type__c == &apos;view&apos;</errorConditionFormula>
+        <errorDisplayField>URL__c</errorDisplayField>
+        <errorMessage>The URL should start with &quot;http://&quot; or &quot;https://&quot;.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Key_Value_Length_Rule</fullName>
+        <active>true</active>
+        <errorConditionFormula>LEN( Key__c )  &gt; 128</errorConditionFormula>
+        <errorDisplayField>Key__c</errorDisplayField>
+        <errorMessage>The menu&apos;s key value can contain 128 characters at most</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>The_First_Level_Menu_Rule</fullName>
+        <active>true</active>
+        <errorConditionFormula>AND(ISBLANK( ParentMenu__c ),  LEN( Name )  &gt; 16 )</errorConditionFormula>
+        <errorDisplayField>Name</errorDisplayField>
+        <errorMessage>The one-level menu&apos; s name can contains 16 characters at most</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>The_Secondary_Menu_Rule</fullName>
+        <active>true</active>
+        <errorConditionFormula>AND(  NOT(ISBLANK( ParentMenu__c ))  , LEN(Name)  &gt; 40 )</errorConditionFormula>
+        <errorDisplayField>Name</errorDisplayField>
+        <errorMessage>The secondary menu&apos;s name can contains 20 characters at most</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Url_Value_Length_Rule</fullName>
+        <active>true</active>
+        <errorConditionFormula>LEN( URL__c )  &gt; 256</errorConditionFormula>
+        <errorDisplayField>URL__c</errorDisplayField>
+        <errorMessage>The menu&apos;s url length can contains 256 characters at most</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Valid_Key_Value</fullName>
+        <active>true</active>
+        <description>used for make sure have a key value when type is click.</description>
+        <errorConditionFormula>(Type__c  = &apos;click&apos;) &amp;&amp;  ISBLANK(  Key__c  )</errorConditionFormula>
+        <errorDisplayField>Key__c</errorDisplayField>
+        <errorMessage>The &quot;Key&quot; can&apos;t be null.</errorMessage>
+    </validationRules>
+</CustomObject>

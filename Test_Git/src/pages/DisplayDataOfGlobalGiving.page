@@ -1,0 +1,22 @@
+<apex:page controller="GlobalGiving" id="mainPage">
+    <apex:form >
+    <apex:pageBlock title="Global Giving Projects" id="pageBlockID">
+    
+        <apex:inputText Label="Search" id="searchinput" onkeypress="return enter_keypress(event)" value="{!projectName}">
+            <apex:actionFunction name="SearchAccount" action="{!getRequiredResponse}"  />
+        </apex:inputText>
+        
+        <apex:commandButton Value="Search" action="{!callRequiredResponseMethod}" rerender="pageBlock2,message"/>
+        <apex:pageMessages id="message"/>
+       
+    </apex:pageBlock>
+    
+    <apex:pageBlock id="pageBlock2">
+        
+        <apex:pageBlockTable value="{!wrapList}" var="war">
+            <apex:column value="{!war.res.globalResponse__c}" />
+        </apex:pageBlockTable>
+        
+    </apex:pageBlock> 
+    </apex:form> 
+</apex:page>

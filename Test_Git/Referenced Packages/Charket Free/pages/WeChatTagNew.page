@@ -1,0 +1,24 @@
+<apex:page showHeader="true" sidebar="true" standardController="CharketFree__WeChatTag__c" extensions="CharketFree.WeChatTagNewController">
+    <apex:sectionHeader title="WeChat Tag Edit" subtitle="New WeChat Tag">
+        <apex:form >
+            <apex:pageBlock title="WeChat Tag Edit" mode="edit">
+                <apex:outputPanel id="message" style="display: {!IF(HasError, 'inline', 'none')}">
+                    <apex:pageMessages />
+                </apex:outputPanel>
+                <apex:pageBlockSection title="Information" columns="1" collapsible="false">
+                    <apex:inputField label="Tag Name" value="{! WeChatTag__c.Name}" required="true"/>
+                    <apex:inputField label="WeChat Account" value="{! WeChatTag__c.WeChatAccount__c}" required="true"/>
+                </apex:pageBlockSection>
+                <apex:pageBlockButtons >
+                    <apex:commandButton action="{! save}" value="Save" reRender="message" status="operateStatus"/>
+                    <apex:commandButton action="{! Cancel}" value="Cancel" immediate="true"/>
+                    <apex:actionStatus id="operateStatus">
+                        <apex:facet name="start">
+                            <img src="/img/loading.gif" alt="loading..."/>
+                        </apex:facet>
+                    </apex:actionStatus>
+                </apex:pageBlockButtons>
+            </apex:pageBlock>
+        </apex:form>
+    </apex:sectionHeader>
+</apex:page>

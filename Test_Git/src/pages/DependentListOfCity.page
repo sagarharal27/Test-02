@@ -1,0 +1,31 @@
+<!-- Page : DependentListOfCity
+     Created Date : 9/8/2015
+     Description this page displays Country and city in pick list  -->
+       
+<apex:page controller="DependentListController"> 
+<apex:pageBlock >
+    <apex:form >
+    
+    <apex:actionFunction name="rerenderCity" rerender="ListCity" >
+        <apex:param name="Param" assignTo="{!country}" value="" />
+    </apex:actionFunction>
+
+    <apex:pageBlockSection columns="6">
+        Country
+        <apex:selectList id="ListCountry" value="{!country}" size="1" onchange="rerenderCity(this.value)">
+            <apex:selectOptions value="{!countrylist}">
+            </apex:selectOptions>
+        </apex:selectList>
+    </apex:pageblocksection>
+
+    <apex:pageBlockSection columns="6">
+        City
+        <apex:selectList id="ListCity" value="{!City}" size="1">
+            <apex:selectOptions value="{!CityList}">
+            </apex:selectOptions>
+        </apex:selectList>
+    </apex:pageblocksection>
+
+    </apex:form>
+</apex:pageBlock>
+</apex:page>

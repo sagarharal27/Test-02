@@ -1,0 +1,37 @@
+<apex:page controller="GenerateTestPaper">
+    <apex:form id="form1">
+        
+        <apex:pageMessages id="msg"/>
+    
+        <apex:pageBlock id="pb1" mode="edit">
+            <center>
+                <img src="{!$Resource.ChanakyaClassesLogin}" width="450" height="200" /><br/>
+            </center>
+            
+            <apex:pageBlockSection title="Login Page" >
+            </apex:pageBlockSection>
+            
+
+                <apex:outputLabel value="User Name"/>
+                &nbsp; <apex:inputText value="{!profName}"/>
+                
+                <apex:outputLabel value=" Subject"/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <apex:SelectList value="{!strStandard}" size="1" multiselect="false">
+                    <apex:selectOption itemLabel="--None--" itemValue="" />
+                    <apex:selectOptions value="{!OptionsForStandard}" />
+                </apex:SelectList><br/><br/>
+                
+                <apex:outputLabel value=" Password"/>
+                &nbsp;&nbsp;&nbsp;<apex:inputSecret value="{!password}"/><br/><br/>
+                            
+
+                <br/><br/>       
+                <apex:commandButton value="Log In" action="{!redirectToStandardOption}" 
+                                                reRender="form1"/>&nbsp;&nbsp;
+                <apex:commandButton value="Sign Up" action="{!redirectWithNewUser}" reRender="form1"/>
+
+        </apex:pageBlock>
+    
+    </apex:form> 
+</apex:page>

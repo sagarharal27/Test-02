@@ -1,0 +1,3 @@
+<apex:page controller="Addmultiplechildrecordscontroller" readOnly="true" contentType="text/csv#ParentRecordTemplate.csv" >
+	<apex:outputText value="{!strHeaderRowValue}"/>
+</apex:page>

@@ -1,0 +1,78 @@
+<!-- Page : DynamicSOQLStatement
+    Date : 25/8/2015
+    Description : This VF page displays  objects and fields -->
+
+<apex:page controller="DynamicSOQLStatements" title="Object and Fields" id="page1">
+    <apex:form id="form">
+        <apex:pageBlock > 
+        <font size="4" color="Green"> <b>Welcome to Dynamic Apex </b></font>
+        </apex:pageBlock>
+                
+        <!-- Page block for displaying objects -->
+        <apex:pageBlock > 
+        <apex:pageBlockSection title="Objects" columns="6">
+            Select Object : <br />
+            <apex:SelectList value="{!strObjectName}" size="1">
+                <apex:selectOption itemlabel="--None--" itemvalue=" " />
+                <apex:selectOptions value="{!allObjectName}" />
+                <apex:actionSupport event="onchange" action="{!getobjectFieldsName}"
+                                                         reRender="form,errorMessage" />
+            </apex:SelectList>
+        </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+        <!-- Page block for displaying fields -->
+        <apex:pageBlock rendered="{!blHideFields}">
+        <apex:pageBlocksection title="Fields" columns="6">
+            Select Fields : <br /> 
+            <apex:SelectList value="{!listObjectField}" size="5" multiselect="true">
+                <apex:selectOptions value="{!listSelectedField}" />
+            </apex:SelectList>
+        </apex:pageBlocksection>
+        </apex:pageBlock>
+        
+        <!-- Page block for displaying radio buttons -->
+        <apex:pageBlock rendered="{!blHideOrder}">
+        <apex:pageBlocksection title="Order of Records" columns="6">
+            Sort As : <br /> 
+            <apex:selectRadio value="{!strOrderBy}">
+                <apex:selectOptions value="{!radioOptions}" />
+            </apex:selectRadio>
+        </apex:pageBlocksection>
+        </apex:pageBlock>
+        
+        <!-- Page block for displaying limits -->
+        <apex:pageBlock rendered="{!blHideLimit}" id="pb5">
+        <apex:pageBlocksection title="Limits of Records" columns="6">
+            Maximum records to display : <br />
+            <apex:SelectList value="{!intSelectedNumber}" size="1" multiselect="false">
+                <apex:selectOptions value="{!listNumber}" />
+            </apex:SelectList>
+        </apex:pageBlocksection>
+        </apex:pageBlock>
+        
+        <!-- Page block for displaying query -->
+        <apex:pageBlock id="pb" rendered="{!blHideQuery}" >
+            <apex:pageBlocksection title="Query">
+            <apex:commandButton value="Execute Query" action="{!displayQuery}"
+                            rerender="textArea,textAreaResult,errorMessage,pb" />
+            <br /><br />
+            <apex:outputlabel value="Generated SOQL Query :" /><br/>
+            <apex:outputText value="{!strquery}" />
+            
+            <br />
+            <apex:pageMessages id="errorMessage" />
+            <br />
+            </apex:pageBlocksection>
+        </apex:pageBlock>
+        
+        <apex:pageBlock id="textAreaResult" rendered="{!blHideResult}">
+            Result of Query : <br />
+            <apex:pageBlockTable value="{!listQueryResult}" var="SingleRecord" id="queryResultTable">
+                <apex:repeat value="{!listObjectField}" var="Record">
+                    <apex:column value="{!SingleRecord[Record]}"/>
+                </apex:repeat>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

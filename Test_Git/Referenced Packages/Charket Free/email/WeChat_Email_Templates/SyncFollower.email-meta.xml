@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Sync WeChat Followers</name>
+    <style>none</style>
+    <subject>[Charket] Notifications from the WeChat account for the sync WeChat subscribers</subject>
+    <textOnly>Your request to sync WeChat subscribers was completed. All WeChat subcribers have been created as leads in Salesforce.</textOnly>
+    <type>custom</type>
+</EmailTemplate>

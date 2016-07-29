@@ -1,0 +1,54 @@
+<apex:page >
+    <apex:form >
+        <apex:outputPanel id="op1" styleClass="fieldToHide">
+            <apex:pageBlock >
+                <apex:inputText id="inputId"  html-placeholder="Username"/>
+                <apex:commandButton value="Hide Above Block" id="btnId" styleClass="abc" reRender="nothing"/>
+            </apex:pageBlock>
+        </apex:outputPanel>
+       
+        <apex:outputPanel id="op2">
+            <apex:pageBlock >
+                <apex:outputLabel value="Thank You"/>
+                <apex:commandButton value="Show Below Block" id="btnId2" styleClass="abc" reRender="nothing"/>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        
+    </apex:form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+        $j= jQuery.noConflict();
+        
+//                 $j('[id$=inputId]').keypress(function() {
+//                     console.log('Value =' +$j('[id$=inputId]').val())    ;
+//                 });
+              
+              var asciiValue;
+              $j('[id$=inputId]').keyup(function(e) {
+                 asciiValue = e.which;
+                 console.log(asciiValue);
+                 if(asciiValue == 32 ) {
+                     console.log('into If');  
+                 alert('One word completed');
+                 }
+              });
+              
+              $j('[id$=btnId]').click(function() {
+                  console.log('KeyPressed.' )    ;
+                    $j('.fieldToHide').hide();
+              });
+              
+              $j('[id$=btnId2]').click(function() {
+                  console.log('KeyPressed.' )    ;
+                    $j('.fieldToHide').show();
+              });
+            
+          
+             
+          
+         
+</script>
+
+</apex:page>

@@ -1,0 +1,62 @@
+<apex:page showHeader="true" sidebar="true" controller="CharketFree.WeChatTagChooseController" tabStyle="CharketHome__tab">
+    <apex:form id="form">
+        <apex:sectionHeader title="WeChat Tag Assignment New" subtitle="Choose tags for the Follower"/> 
+        <apex:outputPanel id="message" style="display: {!IF(HasError, 'inline', 'none')}">
+            <apex:pageMessages />
+        </apex:outputPanel>
+        <apex:pageBlock >
+            <apex:outputText value="No tags to add." style="display:{!IF(HasNoRecord,'inline', 'none')}"/>
+            <apex:pageBlockTable id="table" value="{!WeChatTags}" var="tag" style="display:{!IF(HasNoRecord,'none', '')}">
+                <apex:column headerValue="Action">
+                    <apex:inputCheckbox value="{!tag.IsSelected}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:commandLink action="{!orderByName}" reRender="table">
+                            Tag Name 
+                            <apex:outputPanel rendered="{!OrderBy == 'Name'}" layout="none">{!IF(MOD(NameClick, 2) == 0,'↓', '↑')}</apex:outputPanel>
+                        </apex:commandLink>                  
+                    </apex:facet>
+                    {!tag.Name}
+                </apex:column>
+
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:commandLink action="{!orderByWeChatTagId}" reRender="table">
+                            WeChat Tag ID
+                            <apex:outputPanel rendered="{!OrderBy == 'WeChatTagID__c'}" layout="none">{!IF(MOD(WeChatTagIdClick, 2) == 0, '↓', '↑')}
+                            </apex:outputPanel>
+                        </apex:commandLink>                        
+                    </apex:facet>
+                    {!tag.WeChatTagId}
+                </apex:column>
+            </apex:pageBlockTable>
+
+            <table style="width:100%;margin-top:10px;display:{!IF(HasNoRecord,'none', '')}">
+                <tr>
+                    <td style="width:40%">
+                        Page:
+                        <apex:outputText value="{!PageNumber } of {!CEILING(ResultSize / PageSize)}"/>
+                    </td>
+                    <td style="width:60%"> 
+                        <apex:commandLink action="{!Previous}" value="Previous" rendered="{!HasPrevious}"/>
+                        <apex:outputText style="color: #ccc;" value="◀︎ Previous" rendered="{!NOT(HasPrevious)}"/>
+                        &nbsp;&nbsp;&nbsp;
+                        <apex:commandLink action="{!Next}" value="Next" rendered="{!HasNext}"/>
+                        <apex:outputText style="color: #ccc;" value="Next ►" rendered="{!NOT(HasNext)}"/>
+                    </td> 
+                </tr>       
+            </table>
+
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!addTags}" status="operateStatus" reRender="message"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+                <apex:actionStatus id="operateStatus">
+                    <apex:facet name="start">
+                        <img src="/img/loading.gif" alt="loading..."/>
+                    </apex:facet>
+                </apex:actionStatus>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,775 @@
+<apex:page showHeader="true" sidebar="false" tabStyle="CharketHome__tab">
+    <apex:stylesheet value="{!URLFOR($Resource.CharketFree__CharketStyle, 'bootstrap.css')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.CharketFree__CharketStyle, 'jquery.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.CharketFree__CharketStyle, 'bootstrap.min.js')}"/>
+    <style type="text/css">
+        #guid ul li{
+            list-style-type: none;
+            margin-left: -5px;
+        }
+        #guid .setup{
+            margin-bottom: 30px;
+        }
+        #guid .setuptitle{
+            font-size: 15px;
+            font-weight: bold;
+            color: #353535;
+            padding-bottom: 10px;
+        }
+        #guid .overview{
+            font-size: 15px;
+            color: #353535;
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+        #guid .steptitle{
+            font-size: 13px;
+            font-weight: bold;
+        }
+        #guid .setupdescription{
+            margin: 0px 0px 8px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        #guid .setupdescription ul li{
+            list-style-type: circle;
+            line-height: 2;
+        }
+        #guid .setupdescription ul li ul li{
+            list-style-type: disc;
+        }
+        .title{
+            color: #000;
+            font-size: .9em;
+            font-weight: bold;
+        }
+        .feature{
+            width: 1048px;
+            border: 1px solid  #F2F2F3;
+            border-collapse: collapse;
+        }
+        .feature tr{
+            height: 25px;
+            text-align:center;
+        }
+        .feature td{
+            border: 1px solid #F2F2F3;
+        }
+        .featurecol{
+            text-align: left;
+            padding-left: 8px;
+        }
+        .feature .limitnum{
+            color: #595959;
+        }
+        .table-title
+        {
+            vertical-align: middle !important;
+        }
+
+        #force .col-md-3{
+            width: 20%;
+        }
+    </style>
+    <script>
+        $(function(){
+            $('#menu_link').click(function(){
+                $('.active').removeClass('active');
+                $('#menu_li').addClass('active');
+            });
+            $('#material_link').click(function(){
+                $('.active').removeClass('active');
+                $('#material_li').addClass('active');
+            });
+            $('#message_link').click(function(){
+                $('.active').removeClass('active');
+                $('#message_li').addClass('active');
+            });
+            $('#campagin_link').click(function(){
+                $('.active').removeClass('active');
+                $('#campagin_li').addClass('active');
+            });
+            $('#lead_link').click(function(){
+                $('.active').removeClass('active');
+                $('#lead_li').addClass('active');
+            });
+            $('#report_link').click(function(){
+                $('.active').removeClass('active');
+                $('#report_li').addClass('active');
+            });
+        });
+
+    </script>
+    <apex:pageMessages />
+    <apex:outputPanel layout="block">
+        <div id="guid">
+            <ul>
+                <apex:outputPanel layout="none" rendered="{!$CurrentPage.parameters.guidance == ''}">
+                    <div id="force">
+                        <div class="col-md-3">
+                            <ul class="nav nav-pills nav-stacked">
+                                <li></li>
+                                <li class="active" id="start_li"><a href="#start" role="tab" data-toggle="tab">Get Started</a></li>
+                                <li id="menu_li"><a href="#menu" role="tab" data-toggle="tab">Customize WeChat Menu</a></li>
+                                <li id="material_li"><a href="#material" role="tab" data-toggle="tab">Add Message Templates</a></li>
+                                <li id="message_li"><a href="#message" role="tab" data-toggle="tab">Create WeChat Messages</a></li>
+                                <li id="report_li"><a href="#report" role="tab" data-toggle="tab">
+                                Reports and Dashboards</a></li>
+                                <li id="campagin_li"><a href="#campagin" role="tab" data-toggle="tab">
+                                Create Marketing Campaigns</a></li>
+                                <li id="lead_li"><a href="#lead" role="tab" data-toggle="tab">Generate Leads</a></li>
+                                <li id="chat_li"><a href="#chat" role="tab" data-toggle="tab">Live Chat</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="start">
+                                        <div class="setupdescription">
+                                        <h2>Welcome to Charket!</h2>
+                                        <p class="overview">Built for marketing, Charket connects Salesforce, the world’s #1 CRM application, with WeChat, one of the most popular social platforms. By using Charket, marketing people can generate QR codes for marketing campaigns and collect lead information from WeChat users who scan the QR codes. All leads are automatically put under marketing campaigns and centrally managed within Salesforce.
+                                        <br/>
+                                        Here are steps to complete the setup of Charket and use Charket with marketing campaigns. Click the link of each step in the sidebar for more information.
+                                        </p>
+                                        <p class="steptitle">
+                                            1. Click the "<a href="{!$Page.BindWizard}">Link WeChat Account</a>" button to link a WeChat account with your Salesforce org.
+                                        </p>
+                                        <p class="steptitle">
+                                            2. Customize each linked WeChat account:
+                                            <ul>
+                                                <li>
+                                                    <a href="#menu" role="tab" data-toggle="tab" id="menu_link">Customize WeChat Menu</a>: create a WeChat menu from within Salesforce
+                                                </li>
+                                                <li>
+                                                    <a href="#material" role="tab" data-toggle="tab" id="material_link">Add Message Templates</a>: define the templates of messages to be sent to WeChat subscribers. A template can be used for the following scenarios:
+                                                    <ul>
+                                                        <li>
+                                                            Send a greeting message to new WeChat subscribers.
+                                                        </li>
+                                                        <li>
+                                                            Send a greeting message to WeChat users who scan your QR code.
+                                                        </li>
+                                                        <li>
+                                                            Send auto responses to messages from WeChat subscribers or to menu actions by WeChat subscribers.
+                                                        </li>
+
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a href="#message" role="tab" data-toggle="tab" id="message_link">Create Messages</a>: create messages using the templates defined in the above step.
+                                                </li>
+                                            </ul>
+                                        </p>
+                                        <p class="steptitle"> 
+                                            3. <a href="#campagin" role="tab" data-toggle="tab" id="campagin_link">Create marketing campaigns</a> for seminars, trade shows, etc. and generate a WeChat QR code for each campaign. People attending those marketing events can scan a QR code and interact with marketing people through their WeChat mobile app.
+                                        </p>
+                                        <p class="steptitle"> 
+                                            4. <a href="#lead" role="tab" data-toggle="tab" id="campagin_link">Generate leads</a> from WeChat users who scan a WeChat QR code and put leads under campaigns automatically.
+                                        </p>
+                                        <p class="steptitle"> 
+                                            5. <a href="#report" role="tab" data-toggle="tab" id="campagin_link">Create reports and dashboards</a> and put them under the Charket Home tab.
+                                        </p>
+                                        <p class="steptitle"> 
+                                            6. <a href="#chat" role="tab" data-toggle="tab" id="campagin_link">Live Chat</a> with WeChat subscribers.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="menu">
+                                    <div class="setuptitle">
+                                        Customize WeChat Menu
+                                    </div>
+                                    <li class="setup">
+                                        <div class="setupdescription">
+                                            <span>
+                                            Customize the WeChat menu to be displayed in WeChat mobile app.
+                                            </span>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                <span>1. Open a linked WeChat account by clicking the account name highlighted in the screen below.</span>
+                                            </li>
+                                            <li>
+                                                <span>2. Click the New WeChat Menu button to create a new menu item.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/menu1.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>3. Select one record type.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/menu2.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>4. Fill in all fields and click the Save button.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/menu3.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>5. Click the Generate Menu button to send WeChat a request to generate the customized menu on the WeChat side.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/menu4.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>6. Check the menu from the WeChat mobile app to make sure the menu was generated successfully.</span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </div>
+                                <div class="tab-pane" id="material">
+                                    <div class="setuptitle">
+                                        Add Message Templates
+                                    </div>
+                                    <li class="setup">
+                                        <div class="setupdescription">
+                                            <span >Similar to an email template, a message template defines what a WeChat message looks like. </span>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                <span>1. Go to the Message Templates tab.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/material1.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>2. Click the New button.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/material2.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>3. Select one of the two record types and click the Continue button</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/material3.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>4. Fill all fields and click the Save button.</span>
+                                                
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </div>
+                                <div class="tab-pane" id="message">
+                                    <li class="setup">
+                                        <div class="setuptitle">
+                                            <span>Create WeChat Messages</span>
+                                        </div>
+                                        <div class="setupdescription">
+                                            <span>A WeChat message can be used in various cases. For example, it can be a greeting message sent to new WeChat subscriber, or it can be an auto response to a request from a  WeChat subscriber, it can even be a sales promotion message delivered to WeChat subscribers on a timely basis.</span>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                <span>1. Go to the WeChat account detail page. Click New WeChat Message Setting button to start your message setting.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/setting1.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>2. Fill the blanks and Save.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/setting2.png')}" />
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </div>
+                                <div class="tab-pane" id="campagin">
+                                    <div class="setuptitle">
+                                        Create Marketing Campaigns
+                                    </div>
+                                    <li class="setup">
+                                        <div class="setupdescription">
+                                            <span>
+                                            A campaign can be any marketing event, such as a seminar, or a trade show, etc. Combining marketing management with WeChat is the best way to engage Chinese consumers considering almost all Chinese are using WeChat.
+                                            <br/>
+                                            Note, for any WeChat related buttons or fields that are presented in the following two screenshots but do not appear in your page layouts, they need to be added to your page layouts. </span>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                <div style="width: 930px;">
+                                                    <span>1. If WeChat is expected to help run a marketing campaign, make sure the WeChat Account field is populated when the campaign is being created.</span>
+                                                </div>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/campaign1.png')}" />
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div style="width: 930px;">
+                                                    <span>2. Once a campaign is created, click the “Generate QR Code” button to generate a WeChat QR code for the campaign.</span>
+                                                </div>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/campaign2.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>3. Print the QR code onto marketing materials or put the QR code to any web pages related to this campaign.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/campaign3.png')}" />
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </div>
+                                <div class="tab-pane" id="lead">
+                                    <div class="setuptitle">
+                                        Generate Leads
+                                    </div>
+                                    <li class="setup">
+                                        <div class="setupdescription">
+                                            <span>When a WeChat user scans your WeChat QR code or follows your WeChat account, Charket automatically saves the WeChat
+                                            user as a lead in Salesforce and puts the lead under the campaign record from which the QR code was generated. The following screen shows all WeChat information Charket collects.</span>
+                                        </div>
+                                        <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/lead.png')}" />
+                                    </li>
+                                </div>
+                                <div class="tab-pane" id="report">
+                                    <div class="setuptitle">
+                                        Reports and Dashboards
+                                    </div>
+                                    <li class="setup">
+                                        <div class="setupdescription">
+                                            <span>An administrator will need to complete the following settings in order to show dashboard charts under the Charket Home tab.</span>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                <span>1. Use Setup | Develop | Custom Settings path to find the settings of the WeChat Reports that used in Charket Home page.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/charket1.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>2. Click Manage before the WeChat Report Link.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/charket2.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>3. Click edit link before the record.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/charket3.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>4. Save, Done.</span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="setup">
+                                        <div class="setuptitle">
+                                            <span>Find Your Report ID</span>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                <span>1. Click any report that in your system. Suggest clicking any report in WeChat Report folder.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/report1.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>2. Go to the View page of the Report.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/report2.png')}" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <span>3. The ID of this report is in the red box. </span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </div>
+                                <div class="tab-pane" id="chat">
+                                    <li class="setup">
+                                        <div class="setuptitle">
+                                            <span>Live Chat</span>
+                                        </div>
+                                        <div class="setupdescription">
+                                            <span>There are two ways to start a live chat with a WeChat subscriber.</span>
+                                            <p>1. If a WeChat live chat is initiated by a WeChat subscriber, an email will be sent to an internal Salesforce user who can click a link in the email to open the live chat window.</p>
+                                            <p>2. Follow the steps below if an internal Salesforce user wants to start a conversation with a WeChat subscriber. Please note, there is a WeChat limit that such conversation can only be started if a message was received from the WeChat subscriber within 48 hours.</p>
+                                        </div>
+                                        
+                                        <ul>
+                                            <li>
+                                                <span>2.1. Go to Setup | Customize | Leads | Page Layouts, and click the Edit link along with the page layout where the Start Live Chat button will be added.</span>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/chat1.png')}" />
+                                                </div>
+                                            </li>
+                                            <br/>
+                                            <li>
+                                                <span>2.2. Drag and drop the Start Live Chat button onto the Custom Buttons area in the page layout, and click the Save button.</span>
+                                                <br/>
+                                                <br/>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/chat2.png')}" />
+                                                </div>
+                                            </li>
+                                            <br/>
+                                            <li>
+                                                <span>2.3. Follow the same steps to add the Start Live Chat button to Contact page layout(s).</span>
+                                            </li>
+                                            <br/>
+                                            <li>
+                                                <span>2.4. Start a conversation with a WeChat subscriber by clicking the Start Live Chat button from a Lead or Contact record.</span>
+                                                <br/>
+                                                <br/>
+                                                <div>
+                                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/chat3.png')}" />
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+
+                <apex:outputPanel layout="none" rendered="{!$CurrentPage.parameters.guidance == 'menu'}">
+                    <div class="setuptitle">
+                        Customize WeChat Menu
+                    </div>
+                    <li class="setup">
+                        <div class="setupdescription">
+                            <span>
+                            Customize the WeChat menu to be displayed in WeChat mobile app.
+                            </span>
+                        </div>
+                        <ul>
+                            <li>
+                                <span>1. Open a linked WeChat account by clicking the account name highlighted in the screen below</span>
+                            </li>
+                            <li>
+                                <span>2. Click the New WeChat Menu Item (or New Menu Item) button to create a new menu item.</span>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/menu1.png')}" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>3. Select one record type.</span>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/menu2.png')}" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>4. Fill in all fields and click the Save button.</span>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/menu3.png')}" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>5. Click the Generate Menu button to send WeChat a request to generate the customized menu on the WeChat side.</span>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/menu4.png')}" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>6. Check the menu from the WeChat mobile app to make sure the menu was generated successfully.</span>
+                            </li>
+                        </ul>
+                    </li>
+                </apex:outputPanel>
+                <apex:outputPanel layout="none" rendered="{!$CurrentPage.parameters.guidance == 'material'}">
+                    <div class="setuptitle">
+                            Add Message Templates
+                        </div>
+                        <li class="setup">
+                            <div class="setupdescription">
+                                <span >Similar to an email template, a message template defines what a WeChat message looks like. </span>
+                            </div>
+                            <ul>
+                                <li>
+                                    <span>1. Go to the Message Templates tab.</span>
+                                    <div>
+                                        <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/material1.png')}" />
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>2. Click the New button.</span>
+                                    <div>
+                                        <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/material2.png')}" />
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>3. Select one of the two record types and click the Continue button</span>
+                                    <div>
+                                        <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/material3.png')}" />
+                                    </div>
+                                </li>
+                            <li>
+                                <span>4. Fill all fields and click the Save button.</span>
+                            </li>
+                        </ul>
+                    </li>
+                </apex:outputPanel>
+                <apex:outputPanel layout="none" rendered="{!$CurrentPage.parameters.guidance == 'message'}">
+                    <li class="setup">
+                        <div class="setuptitle">
+                            <span>Create WeChat Messages</span>
+                        </div>
+                        <div class="setupdescription">
+                            <span>A WeChat message can be used in various cases. For example, it can be a greeting message sent to new WeChat subscriber, or it can be an auto response to a request from a  WeChat subscriber, it can even be a sales promotion message delivered to WeChat subscribers on a timely basis.</span>
+                        </div>
+                        <ul>
+                            <li>
+                                <span>1. Go to the WeChat account detail page. Click New WeChat Message Setting button to start your message setting.</span>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/setting1.png')}" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>2. Fill the blanks and Save.</span>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/setting2.png')}" />
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </apex:outputPanel>
+                <apex:outputPanel layout="none" rendered="{!$CurrentPage.parameters.guidance == 'campaign'}">
+                    <div class="setuptitle">
+                            Create Marketing Campaigns
+                        </div>
+                        <li class="setup">
+                            <div class="setupdescription">
+                                <span>
+                                A campaign can be any marketing event, such as a seminar, or a trade show, etc. Combining marketing management with WeChat is the best way to engage Chinese consumers considering almost all Chinese are using WeChat.
+                                <br/>
+                                Note, for any WeChat related buttons or fields that are presented in the following two screenshots but do not appear in your page layouts, they need to be added to your page layouts. </span>
+                            </div>
+                            <ul>
+                                <li>
+                                    <div style="width: 930px;">
+                                        <span>1. If WeChat is expected to help run a marketing campaign, make sure the WeChat Account field is populated when the campaign is being created.</span>
+                                    </div>
+                                    <div>
+                                        <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/campaign1.png')}" />
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div style="width: 930px;">
+                                        <span>2. Once a campaign is created, click the "Generate QR Code" button to generate a WeChat QR code for the campaign.</span>
+                                    </div>
+                                    <div>
+                                        <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/campaign2.png')}" />
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>3. Print the QR code onto marketing materials or put the QR code to any web pages related to this campaign.</span>
+                                    <div>
+                                        <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/campaign3.png')}" />
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                </apex:outputPanel>
+                <apex:outputPanel layout="none" rendered="{!$CurrentPage.parameters.guidance == 'lead'}">
+                    <div class="setuptitle">
+                            Generate Leads
+                    </div>
+                    <li class="setup">
+                        <div class="setupdescription">
+                            <span>When a WeChat user scans your WeChat QR code or follows your WeChat account, Charket automatically saves the WeChat user as a lead in Salesforce and puts the lead under the campaign record from which the QR code was generated. The following screen shows all WeChat information Charket collects.</span>
+                        </div>
+                        <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/lead.png')}" />
+                    </li>
+                </apex:outputPanel>
+                <apex:outputPanel layout="none" rendered="{!$CurrentPage.parameters.guidance == 'report'}">
+                    <div class="setuptitle">
+                        Reports and Dashboards
+                    </div>
+                    <li class="setup">
+                        <div class="setupdescription">
+                            <span>An administrator will need to complete the following settings in order to show dashboard charts under the Charket Home tab.  </span>
+                        </div>
+                        <ul>
+                            <li>
+                                <span>1. Use Setup | Develop | Custom Settings path to find the settings of the WeChat Reports that used in Charket Home page.</span>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/charket1.png')}" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>2. Click Manage before the WeChat Report Link.</span>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/charket2.png')}" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>3. Click edit link before the record.</span>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/charket3.png')}" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>4. Save, Done.</span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="setup">
+                        <div class="setuptitle">
+                            <span>Find Your Report ID</span>
+                        </div>
+                        <ul>
+                            <li>
+                                <span>1. Click any report that in your system. Suggest clicking any report in WeChat Report folder.</span>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/report1.png')}" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>2. Go to the View page of the Report.</span>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/report2.png')}" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>3. The ID of this report is in the red box. </span>
+                            </li>
+                        </ul>
+                    </li>
+                </apex:outputPanel>
+                <apex:outputPanel layout="none" rendered="{!$CurrentPage.parameters.guidance == 'chat'}">
+                    <li class="setup">
+                        <div class="setuptitle">
+                            <span>Live Chat</span>
+                        </div>
+                        <div class="setupdescription">
+                            <span>There are two ways to start a live chat with a WeChat subscriber.</span>
+                            <p>1. If a WeChat live chat is initiated by a WeChat subscriber, an email will be sent to an internal Salesforce user who can click a link in the email to open the live chat window.</p>
+                            <p>2. Follow the steps below if an internal Salesforce user wants to start a conversation with a WeChat subscriber. Please note, there is a WeChat limit that such conversation can only be started if a message was received from the WeChat subscriber within 48 hours.</p>
+                        </div>
+                        
+                        <ul>
+                            <li>
+                                <span>2.1. Go to Setup | Customize | Leads | Page Layouts, and click the Edit link along with the page layout where the Start Live Chat button will be added.</span>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/chat1.png')}" />
+                                </div>
+                            </li>
+                            <br/>
+                            <li>
+                                <span>2.2. Drag and drop the Start Live Chat button onto the Custom Buttons area in the page layout, and click the Save button.</span>
+                                <br/>
+                                <br/>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/chat2.png')}" />
+                                </div>
+                            </li>
+                            <br/>
+                            <li>
+                                <span>2.3. Follow the same steps to add the Start Live Chat button to Contact page layout(s).</span>
+                            </li>
+                            <br/>
+                            <li>
+                                <span>2.4. Start a conversation with a WeChat subscriber by clicking the Start Live Chat button from a Lead or Contact record.</span>
+                                <br/>
+                                <br/>
+                                <div>
+                                    <apex:image value="{!URLFOR($Resource.CharketFree__CharketStyle, 'guideImages/chat3.png')}" />
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </apex:outputPanel>
+                
+                <apex:outputPanel layout="none" rendered="{!$CurrentPage.parameters.guidance == 'limit'}">
+                    <apex:pageBlock title="Editions and Features">
+                        <apex:pageBlockSection columns="1" title="WeChat Account Types" >
+                            <div style="line-height:20px;">
+                                <p>
+                                    <span class="title">Service Account</span>: ­provides businesses and organizations more robust business services and user management capabilities. It means to help companies quickly implement a new public service platform.
+                                </p>
+                                <p>
+                                    <span class="title">Subscription Account</span>: provides a new way of information dissemination for media and individuals. It means to build better communication and management model for WeChat subscribers.
+                                </p>
+                            </div>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection columns="1">
+                            <table class="feature">
+                                <tr class="title">
+                                    <td style="width:400px;"></td>
+                                    <td colspan="2">Free Edition</td>
+                                    <td colspan="2">Unlimited Edition</td>
+                                </tr>
+                                <tr class="title">
+                                    <td class="featurecol table-title">Features</td>
+                                    <td class="table-title">Subscription Account</td>
+                                    <td class="table-title">Service Account</td>
+                                    <td class="table-title">Subscription Account</td>
+                                    <td class="table-title">Service Account</td>
+                                </tr>
+                                <tr>
+                                    <td class="featurecol">Link WeChat Accounts</td>
+                                    <td colspan="2" class="limitnum">1</td>
+                                    <td colspan="2" class="limitnum">Unlimited</td>
+                                </tr>
+                                <tr>
+                                    <td class="featurecol">Create WeChat Campaigns</td>
+                                    <td class="limitnum">N/A</td>
+                                    <td class="limitnum">Unlimited</td>
+                                    <td class="limitnum">N/A</td>
+                                    <td class="limitnum">Unlimited</td>
+                                </tr>
+                                <tr>
+                                    <td class="featurecol">Generate Leads</td>
+                                    <td class="limitnum">N/A</td>
+                                    <td class="limitnum">Unlimited</td>
+                                    <td class="limitnum">N/A</td>
+                                    <td class="limitnum">Unlimited</td>
+                                </tr>
+                                <tr>
+                                    <td class="featurecol">Customize WeChat Menus</td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="featurecol">New Subscriber Greetings</td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="featurecol">Auto Responses</td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="featurecol">Save WeChat Conversations</td>
+                                    <td></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                    <td></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="featurecol">Collect Addition Subscriber Information</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="featurecol">Sync Existing Subscribers to Salesforce</td>
+                                    <td></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                    <td></td>
+                                    <td><input type="checkbox" checked="checked" disabled="true"/></td>
+                                </tr>
+                            </table>
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                </apex:outputPanel>
+            </ul>
+        </div>
+    </apex:outputPanel>
+</apex:page>

@@ -1,0 +1,13 @@
+<apex:page controller="GenerateTestPaper">
+<apex:form >
+    <apex:pageBlock >
+        <apex:pageBlocksection title="SElect Standard" columns="1">
+            <apex:selectRadio value="{!strStandard}">
+                <h2>Select Standard to Generate Test Paper :</h2>
+                <apex:selectOptions value="{!OptionsForStandard}"/><br/>
+            </apex:selectRadio>
+            <apex:commandButton value="Next" action="{!redirectToTest}"/>
+        </apex:pageBlocksection> 
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

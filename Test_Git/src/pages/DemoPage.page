@@ -1,0 +1,134 @@
+<apex:page docType="html-5.0" controller="demoController">
+<!--     <apex:form > -->
+<!--     <apex:pageBlock > -->
+<!--         <apex:pageBlockSection> -->
+<!--             <apex:pageBlockSectionItem> -->
+<!--                 Date: <apex:input type="date" value="{!myDate}"/> -->
+<!--             </apex:pageBlockSectionItem> -->
+<!--         </apex:pageBlockSection> -->
+<!--     </apex:pageBlock> -->
+<!-- </apex:form> -->
+<!-- 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/resources/demos/style.css"/>
+    
+    <script>
+        $(function() {
+            $( "#datepicker" ).datepicker();
+        });
+    </script>
+  
+     <html>
+        <style>
+            .pageBlockCss {
+                border-collapse:collapse;
+            }
+            .thColor {
+                background-color: #808080;
+                font-size: 1.100em;
+            }
+            .tdColor {
+                background-color:#ccff99;
+            }
+            tbody#people tr:nth-child(odd) {
+                background-color:#ccff99;
+            }
+            .tdStyle {
+                height: 50px;
+                font-size: 1.100em;
+            }
+            th {
+                text-align: center;
+            }
+        </style>
+        
+        <p>Date: <input type="text" id="datepicker"/></p>
+     </html>
+      -->
+     
+     <!-- 
+     <apex:includescript value="{!$Resource.sortTableFile}"/>
+     <apex:form >
+        <table border="1" class="sortable pageBlockCss" id="indextable" width="80%">
+            <thead>
+                <tr height="50">
+                    <th>Lead Name</th>
+                    <th>Lead Phone</th>
+                    <th>Lead Company</th>
+                    <th>Lead Status</th>
+                </tr>
+            </thead>
+        
+            <tbody id="people">
+                <apex:repeat value="{!listOfLead}" var="leadVar">
+                    <tr class="tdColor tdStyle">
+                        <td>{!leadVar.name}</td>
+                        <td>{!leadVar.phone}</td>
+                        <td><font color="red">{!leadVar.Company}</font></td>
+                        <td>{!leadVar.Status}</td>
+                    </tr>
+                </apex:repeat>
+            </tbody>
+        </table>
+        
+        <br/><br/>
+        <apex:commandButton value="FIRST" action="{!firstButton}" disabled="{!prev}"/>
+        <apex:commandButton value="PREVIOUS" action="{!prevButton}" disabled="{!prev}"/>
+        <apex:commandButton value="NEXT" action="{!nextButton}"/>
+        <apex:commandButton value="LAST" action="{!lastButton}"/>
+         -->
+    <apex:form >
+        <table border="1" id="outerTable" width="80%">
+            <apex:repeat value="{!lstAccount}" var="acc">
+                <tHead>
+                    <tr height="50">
+                        <th>Account Id</th>
+                        <th>Account Name</th>
+                    </tr>
+                </tHead>
+                <tbody>
+                    <tr>
+                        <td>{!acc.Id}</td>
+                        <td>{!acc.Name}</td>
+                    </tr>
+                
+                    <tr>
+                        <table border="1" id="innerTable" width="80%">
+                            <thead>
+                                <tr height="50">
+                                    <th>Contact Id</th>
+                                    <th>Contact Name</th>
+                                </tr>
+                            </thead>
+                            
+                            <apex:repeat value="{!acc.Contacts}" var="acc1">
+                            <tbody>
+                                <tr>
+                                    <td>{!acc1.Id}</td>
+                                    <td>{!acc1.Name}</td>
+                                </tr>
+                            </tbody>
+                            </apex:repeat>
+                        </table>
+                    </tr>
+                </tbody>
+             </apex:repeat>
+        </table>
+    
+    </apex:form>
+    <!-- 
+    <script type="text/javascript">
+        console.log ( 'into script' );
+        $(document).ready(function() {
+            console.log ( 'into function' );
+            $.each($(".indextable"), function( key, table ) {
+                $(table).tablesorter();
+           });
+           
+            $(".indextable").tablesorter();
+        });
+    </script>
+     -->
+</apex:page>

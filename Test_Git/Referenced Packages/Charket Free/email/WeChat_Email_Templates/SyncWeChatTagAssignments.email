@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Action Email</title>
+<style media="all" type="text/css">
+@media only screen and (max-width: 640px) {
+  table[class=body] h1,
+  table[class=body] h2,
+  table[class=body] h3,
+  table[class=body] h4 {
+    font-weight: 600 !important;
+  }
+  table[class=body] h1 {
+    font-size: 22px !important;
+  }
+  table[class=body] h2 {
+    font-size: 18px !important;
+  }
+  table[class=body] h3 {
+    font-size: 16px !important;
+  }
+  table[class=body] .content {
+    padding: 1px !important;
+  }
+  table[class=body] .wrapper {
+    padding: 10px !important;
+  }
+  table[class=body] .container {
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  table[class=body] .action-border {
+    margin-top: 1px !important;
+    margin-bottom: 1px !important;
+  }
+  table[class=body] .btn table,
+  table[class=body] .btn a {
+    width: 100% !important;
+  }
+}
+</style>
+</head>
+
+<body style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; margin: 0; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; font-size: 14px; padding: 0; line-height: 1.6em; -ms-text-size-adjust: 100%; background-color: #f5f5f5; height: 100% !important; width: 100% !important;">
+
+<table class="body" style="box-sizing: border-box; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background-color: #f5f5f5; border-collapse: separate !important;" width="100%" bgcolor="#f5f5f5">
+    <tr>
+        <td class="container" style="box-sizing: border-box; font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; vertical-align: top; padding: 0; display: block; width: 600px; max-width: 600px; margin: 0 auto !important;" width="600" valign="top">
+            <div class="content" style="box-sizing: border-box; margin: 0 auto; padding: 0; display: block; max-width: 600px;">
+<div class="action-border" style="box-sizing: border-box; margin-bottom: 30px; margin-top: 30px; box-shadow: 0 0 4px #e4e4e4; border-top-right-radius: 6px; border-top-left-radius: 6px;">
+    <div class="header" style="box-sizing: border-box; width: auto; max-width: 600px; height: 60px; text-align: center; background-color: #00b7e9; border-top-right-radius: 6px; border-top-left-radius: 6px;">
+        <img src="https://meginfolmo--c.ap0.content.force.com/servlet/servlet.ImageServer?id=01510000005eAZm&oid=00D10000000Yz6F&lastMod=1461830628000" alt="Charket" class="charket-logo" style="max-width: 100%; -ms-interpolation-mode: bicubic; margin-top: 15px; max-height: 30px;">
+    </div>
+    <table class="main" style="box-sizing: border-box; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #fff; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; border-collapse: separate !important;" width="100%">
+        <tr>
+            <td class="wrapper" style="box-sizing: border-box; font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; vertical-align: top; padding: 30px;" valign="top">
+                <table style="box-sizing: border-box; width: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: separate !important;" width="100%">
+                    <tr>
+                        <td style="box-sizing: border-box; font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; vertical-align: top;" valign="top">
+                            <p style="margin: 0; margin-bottom: 15px; width: auto; max-width: 470px; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;">
+                                Your request to sync WeChat Tags was completed. All WeChat Tags have been created in your Salesforce org.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div></div>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

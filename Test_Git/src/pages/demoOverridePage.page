@@ -1,0 +1,44 @@
+<apex:page controller="demoOverrideController" docType="html-5.0" id="pg">
+<apex:form id="frm">
+ 
+    <script>
+        function addition() {
+            var a = (document.getElementById('var1').value);
+            var b = (document.getElementById('var2').value);
+            var c = (document.getElementById('var3').value);
+            var phone =  /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/; 
+            console.log('phone', phone);
+                if(c.match(phone)) {
+                    return true;
+                }
+            else {
+                alert('Invalid number.')
+                return false;
+            }
+            var d = (document.getElementById('var4').value);
+            
+            if((a.length < 3) || (b.length < 3) || (d.length < 10) || (d.length < 10)) {
+                alert('Please provide proper Inputs.')
+            }
+            else {
+                alert('Thank you for registration.')
+            }
+        }
+    </script>
+    
+    <html>
+    <form>
+        
+        First Name : <input type="text" name="firstname" id="var1"/><br/><br/>
+        Second Name : <input type="text" name="secondname" id="var2"/><br/><br/>
+        Contact : <input type="text" name="contact" id="var3"/><br/><br/>
+        card Number : <input type="text" name="card=" id="var4"/><br/><br/>
+        Gender : 
+        Male <input type="radio" name="gender" id="var5"/>
+        Female <input type="radio" name="gender" id="var6"/><br/><br/>
+        <input type="button" value="Submit" onclick="addition();"/>
+      
+    </form>
+    </html>
+</apex:form>
+</apex:page>

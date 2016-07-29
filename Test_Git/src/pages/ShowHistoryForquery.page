@@ -1,0 +1,43 @@
+<!--  Component : ShowHistoryForquery
+      Date : 4/9/2015
+      Description : This is page to show history of queries -->
+
+<apex:page controller="ShowHistoryOfQueryController" title="History of query" id="historyPage">
+    <apex:pageBlock title="History Of Queries" id="pageBlock1">
+        <apex:form >
+        
+            <apex:pageBlockSection title="Queries : ">
+                <apex:pageBlockTable value="{!queryList}" id="pageBlock1" var="que">
+                    <apex:column >
+                        <apex:commandLink value="{!que.Query_Of_User__c}" action="{!getResponseList}">
+                        <apex:param name="responseOfQuery" value="{!que.Id}" />
+                        </apex:commandLink> 
+                    </apex:column>
+                </apex:pageBlockTable>
+             </apex:pageBlockSection>
+                          
+             <apex:panelGrid columns="4"> 
+                <apex:commandButton value="<<" action="{!firstPage}" rerender="pageBlock1"  />
+                <apex:commandButton value="<" action="{!previousRecords}" rerender="pageBlock1"/>
+                <apex:commandButton value=">" action="{!nextRecord}" rerender="pageBlock1"  />
+                <apex:commandButton value=">>" action="{!lastPage}" rerender="pageBlock1"  /> 
+            </apex:panelGrid> 
+            
+            <apex:pageBlock title="Responses for Query" id="pageBlock2">
+                <apex:pageBlockSection title="Responses : ">
+                    <apex:pageBlockTable value="{!resList}" var="res">
+                        
+                        <apex:column value="{!res.Title_Of_query__c}"/>
+                        
+                        <apex:column value="{!res.Link_For_Query__c}"/>
+                        
+                        <apex:column value="{!res.Description__c}"/>
+                        
+                    </apex:pageBlockTable>
+                </apex:pageBlockSection>
+                <c:FooterComponent counter="{!counter}"/>
+            </apex:pageBlock>
+             
+        </apex:form>   
+    </apex:pageBlock>
+</apex:page>

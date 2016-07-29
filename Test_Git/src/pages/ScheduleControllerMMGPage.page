@@ -1,0 +1,65 @@
+<apex:page controller="ScheduleControllerMMG" docType="html-5.0">
+    <apex:form >
+        <html>
+        <style>
+            .pageBlockCss {
+                border-collapse:collapse;
+            }
+           
+        </style>
+        </html>
+        
+        <table border="1" class="pageBlockCss">
+        <thead> 
+        
+        <tr>  
+            <th><h3>Opportunity</h3></th>
+             <apex:repeat value="{!listOfDisplayMonths}" var="monthList" >
+                <th><h2>{!monthList} </h2></th>
+             </apex:repeat>
+        </tr>
+        
+ 
+        <apex:repeat value="{!mapOppLineItemSch}" var="outerKey">
+            <td><h4><br/> Opportunity</h4><br/>
+                <apex:outputText value="{!displayOppName[outerKey]}"/><br/>
+                <h4>Line Items</h4></td>
+             
+            <apex:repeat value="{!mapOppLineItemSch[outerKey]}" var="innerKey">
+                <tr>
+                <td><apex:outputText value="{!displayOppLineItemName[innerKey]}"/></td>
+                    
+                    <apex:repeat value="{!listOfDisplayMonths}" var="months">
+                        <td>
+                        <apex:repeat value="{!mapOppLineItemSch[outerKey][innerKey]}" var="mapMonth">
+                           
+                            <apex:outputPanel rendered="{!mapMonth == months}">
+                               
+                                <apex:repeat value="{!mapOppLineItemSch[outerKey][innerKey][mapMonth]}" var="oppSch">
+                                                                      
+                                    <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                        <apex:param value="{!oppSch.ScheduleDate}" />
+                                    </apex:outputText><br/>
+                                    <apex:inputField value="{!oppSch.Quantity}" />
+                                    <br/><br/>
+                                
+                                </apex:repeat>
+                                
+                            </apex:outputPanel>
+                       
+                        </apex:repeat>
+                        </td>
+                    </apex:repeat>
+                </tr>
+            </apex:repeat>
+        </apex:repeat>
+        
+        <apex:commandButton value="Save Schedules" action="{!saveValuesInQuantity}">
+            <apex:param assignTo="{!oppSchId}" value="{!oppSch.id}" name="assignvalue"/>
+        </apex:commandButton>
+        
+        </thead>
+        </table>
+        
+    </apex:form>
+</apex:page>

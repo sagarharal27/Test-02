@@ -1,0 +1,844 @@
+<apex:page showHeader="true" sidebar="false" standardController="CharketFree__WeChatAccount__c" extensions="CharketFree.BindWizardController">
+    <apex:stylesheet value="{!URLFOR($Resource.CharketFree__CharketStyle, 'fuelux.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.CharketFree__CharketStyle, 'fuelux-responsive.css')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.CharketFree__CharketStyle, 'jquery.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.CharketFree__CharketStyle, 'loader.min.js')}"/>
+    <style>
+        .wizard-card {
+            display:none;
+        }
+
+        .wizard-card .active {
+            display: block;
+        }
+
+        .step-content {
+            color: #5A5656;
+            font-size: 12px;
+        }
+
+        .step-pane {
+            line-height: 2;
+            font-size: 11px;
+            padding-top: 35px;
+            text-align: left;
+            margin: 0 auto;
+            width: 1000px;
+        }
+
+        .step-content .step-pane ul {
+            margin: 0px;
+        }
+
+        .step-content .message {
+            background-color: #f5fcff;
+            margin: 20px 0 0 0;
+            border-color: #bee6ff;
+        }
+
+        .step-content .message .messageText a {
+            color: #2168a7;
+            font-size: 100%;
+            margin: 0;
+        }
+
+        .fuelux select {
+            height: 24px;
+            line-height: 24px;
+        }
+
+        .fuelux ul {
+            padding: 0;
+            margin: 0 0 9px 0;
+        }
+
+        .nav-horiz ul li {
+            list-style-type: none;
+            display:inline;
+            margin-left:10px;
+        }
+
+        .panel {
+            text-align: center;
+            margin-right: 5px;
+        }
+
+        .btn-group {
+            margin-top: 35px;
+            text-align: center;
+            font-size: 15px;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .fuelux .wizard ul li.finished{
+            color: #5FB21C;
+        }
+
+        .panel .step-content .btn-main {
+            background-color: #88B12C;
+            background-image: linear-gradient(to bottom, #8AB529, #87AC31);
+            background-repeat: repeat-x;
+            border: 1px solid #6C8049;
+            border-radius: 3px;
+            color: #FFF;
+            display: inline-block;
+            font-family: Arial;
+            width:60px;
+            height: 30px;
+            padding: 0px 10px 1px;
+            margin-right: -5px;
+        }
+
+        .panel .step-content .btn-main:hover {
+            background: repeat scroll 0 0 #a0cb3d;
+            background-image: -moz-linear-gradient(center top , #a0cb3d, #87ac31);
+            background-image: -webkit-linear-gradient(center top , #a0cb3d, #87ac31);
+            background-image: -o-linear-gradient(center top , #a0cb3d, #87ac31);
+            background-image: linear-gradient(center top , #a0cb3d, #87ac31);
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-normal {
+            background-color: #eaebed;
+            border: 1px solid #c5c6c8;
+            color: #757575;
+            width:60px;
+            height: 30px;
+            text-align:center;
+            border-radius:3px;
+            display: inline-block;
+            font-family: Arial;
+            padding: 0px 10px 1px;
+            margin-right: -5px;
+            cursor:pointer;
+        }
+
+        .btn-normal:hover {
+            background: repeat scroll 0 0 #f5f5f5;
+            background-image: -moz-linear-gradient(center top , #fff, #efefef);
+            background-image: -webkit-linear-gradient(center top , #fff, #efefef);
+            background-image: -o-linear-gradient(center top , #fff, #efefef);
+            background-image: linear-gradient(center top , #fff, #efefef);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        .step2-btn {
+            margin-top: 35px;
+            text-align: center;
+            font-size: 15px;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .wechat-image {
+            width: 600px;
+        }
+
+        .server-config-description{
+            width: 500px;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .server-config-image{
+            width:500px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        /* invalid error message style*/
+        .err {
+            color: red;
+            vertical-align: initial;
+            padding-left: 10px;
+            font-size: 13px;
+            width: 100px;
+        }
+
+        .title {
+            color: #404c5b;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+
+        .bold {
+            font-weight: 700;
+        }
+
+        .lab {
+            vertical-align: initial;
+            font-weight: 600;
+            text-align: right;
+            padding-right: 15px;
+            font-size: 13px;
+        }
+
+        .input-div {
+            margin-top: 25px;
+        }
+
+        .description {
+            text-align: left;
+            width: 600px;
+            margin-bottom: 25px;
+        }
+
+        .required-input {
+            position: relative;
+            height: 100%;
+        }
+
+        .required-block {
+            background-color: #c00;
+            position: absolute;
+            left: -4px;
+            width: 3px;
+            top: 1px;
+            bottom: 1px;
+            height: 22px;
+        }
+
+        .limit {
+            font-size: 15px;
+            text-align: center;
+            margin-top: 50px;
+            height: 450px;
+        }
+
+        .before-verify {
+            display: none;
+            margin-left: 8px;
+            float:right;
+        }
+
+    </style>
+
+    <body>
+    <apex:sectionHeader title="Link WeChat Account" id="head"/>
+    <apex:form >
+        <apex:outputPanel rendered="{!isLimited}">
+            <div class="limit">
+                The free edition supports only one WeChat account. The paid edition supports unlimited WeChat accounts.
+            </div>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!! isLimited}">
+            <div class="panel">
+                <div class="fuelux">
+                    <div id="MyWizard" class="wizard">
+                        <ul class="steps">
+                            <li data-target="#step1" class="active">
+                                <span class="badge badge-info">1</span>
+                                Charket API Endpoint
+                                <span class="chevron"></span>
+                            </li>
+                            <li data-target="#step2">
+                                <span class="badge">2</span>
+                                WeChat Account Information
+                                <span class="chevron"></span>
+                            </li>
+                            <li data-target="#step3">
+                                <span class="badge">3</span>
+                                WeChat Setup
+                                <span class="chevron"></span>
+                            </li>
+                            <li data-target="#step4">
+                                <span class="badge">4</span>
+                                    WeChat AppId&amp;AppSecret
+                                <span class="chevron"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="step-content">
+                        <apex:actionRegion >
+                            <div class="step-pane  active" id="step1" >
+                                <div align="center">
+                                    <div class="section">
+                                        <div class="description">
+                                            <p class="title">Activate Charket APIs</p>
+                                            <p>
+                                            Charket APIs will be called by WeChat servers to pass data from WeChat to Salesforce. Those APIs are included in the Charket package and they are by default private. They will be made accessible to WeChat through a force.com sites and the sites URL will work as the API endpoint. Follow the steps below to generate the endpoint.
+                                            </p>
+                                            <p><span class="bold">1.</span> Go to <span class="bold">Setup | Develop | Sites.</span></p>
+                                            <p><span class="bold">2.</span>
+                                            Create a new force.com sites by following the instructions at this <a href="https://help.salesforce.com/apex/HTViewHelpDoc?id=sites_setup_overview.htm&language=en_US">link</a> and name it as “Charket APIs”. It’s possible to use an existing force.com sites. Creating a new one will reduce sites maintenance complexities.
+                                            </p>
+                                            <p><span class="bold">3.</span> Once a force.com sites is created, click the "<span class="bold">Public Access Settings</span>" button to open the user profile being used by the sites. This user profile determines what Salesforce resources WeChat can access by calling Charket APIs.</p>
+                                            <p><span class="bold">4.</span> Go to the user profile’s <span class="bold">Custom Object Permissions</span> section and make sure this user profile has Read and View All permissions to the four objects shown in the screen below.</p>
+                                            <apex:image url="{!URLFOR($Resource.CharketFree__CharketStyle, 'wizardImages/siteprofile.jpg')}"/>
+                                            <p><span class="bold">5.</span> Go to the <span class="bold">Enabled Apex Class Access</span> section in the same user profile and add the "CharketFree.WeChatService" class to the user profile.</p>
+                                            <apex:image url="{!URLFOR($Resource.CharketFree__CharketStyle, 'wizardImages/siteClass.jpg')}"/>
+                                        </div>
+                                    </div>
+                                    <div class="section" style="margin-bottom:0px">
+                                        <div class="description">
+                                            <p class="title">Fill Out The Charket API EndPoint (Secure URL)</p>
+                                        </div>
+                                        <div class="message infoM4" style="background-color: #f5fcff; width: 58%; margin: 4px 0px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" class="messageTable" width="100%">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <img alt="Information" class="msgIcon" src="/s.gif" title="Information" style="width:20px;" />
+                                                        </td>
+                                                        <td class="messageCell">
+                                                            <div class="messageText" style="margin-left:0px;">
+                                                            The format of the secure URLs for your Force.com sites depends on the organization type or Edition. Your unique subdomain prefix is listed first, followed by Edition or environment type, then instance name and the force.com suffix. In the following examples, the subdomain prefix is “mycompany,” the sandbox name is “mysandbox,” the instance name is “na1,” and the sandbox instance name is “cs1”:
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="description" style="margin:20px 0;">
+                                            <table cellpadding="4" cellspacing="0" width="100%" style="border-collapse:collapse;border-spacing:2px;border-bottom:1px;" rules="rows">
+                                                <tr style="background-color:gray;color:white;">
+                                                    <th colspan="1" rowspan="1" valign="top">Organization Type</th>
+                                                    <th colspan="1" rowspan="1" valign="top">Domain</th>
+                                                    <th colspan="1" rowspan="1" valign="top">Path</th>
+                                                    <th colspan="1" rowspan="1" valign="top">Charket API Endpoint</th>
+                                                </tr>
+                                                <tr style="background-color:#F8F1F1">
+                                                    <td colspan="1" rowspan="1">Production</td>
+                                                    <td colspan="1" rowspan="1"><span>mycompany.secure.force.com</span></td>
+                                                    <td colspan="1" rowspan="1">charket</td>
+                                                    <td colspan="1" rowspan="1"><span>https://mycompany.secure.force.com/charket</span></td>  
+                                                </tr>
+                                                <tr style="background-color:#F8F1F1">
+                                                    <td colspan="1" rowspan="1">Developer Edition</td>
+                                                    <td colspan="1" rowspan="1"><span>mycompany-developer-edition.na1.force.com</span></td>
+                                                    <td colspan="1" rowspan="1">charket</td>
+                                                    <td colspan="1" rowspan="1"><span>https://mycompany-developer-edition.na1.force.com/charket</span></td>  
+                                                </tr>
+                                                <tr style="background-color:#F8F1F1">
+                                                    <td colspan="1" rowspan="1">Sandbox</td>
+                                                    <td colspan="1" rowspan="1"><span>mysandbox-mycompany.cs1.force.com</span></td>
+                                                    <td colspan="1" rowspan="1">charket</td>
+                                                    <td colspan="1" rowspan="1"><span>https://mysandbox-mycompany.cs1.force.com/charket</span></td>  
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <table>
+                                            <td class="lab">Charket API Endpoint</td>
+                                            <td>
+                                                <div class="required-input">
+                                                    <div class="required-block"></div>
+                                                    <apex:inputField style="width:300px;" value="{!WXAccount.CharketFree__SiteUrl__c}" id="site"/>
+                                                </div>
+                                            </td>
+                                            <td class="err">
+                                                <span id="url-invalid" style="display:none;">Enter https URL</span>
+                                            </td>
+                                        </table>
+                                        <div class="description">
+                                            <span> </span>
+                                        </div>
+                                        <div class="message infoM4" style="background-color: #f5fcff; width: 58%; margin: 4px 0px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" class="messageTable" width="100%">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <img alt="Information" class="msgIcon" src="/s.gif" title="Information" style="width:20px;" />
+                                                        </td>
+                                                        <td class="messageCell">
+                                                            <div class="messageText" style="margin-left:0px;">
+                                                            Note, Charket APIs are secure. All data sent to the APIs is encrypted by using Salesforce’s 256 bit SSL certificate.
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="description">
+                                            <p><span class="bold">6.</span> Click the "<span class="bold">Next</span>" button.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step-pane" id="step2">
+                                <div style="width: 800px; margin:0 auto 10px;">
+                                    <apex:pageMessages id="step2Err"/>
+                                </div>
+                                <div align="center">
+                                    <div style="height:350px; width: 800px">
+                                        <apex:image url="{!URLFOR($Resource.CharketFree__CharketStyle, 'wizardImages/acc.jpg')}" style="float:right; width:450px;"/>
+                                        <div style="text-align:left;">
+                                            <p class="title">Save WeChat Account Information</p>
+                                            <p><span class="bold">1.</span> Enter a user friendly name into the WeChat Account Name field.</p>
+                                            <p><span class="bold">2.</span> Open this <a href="https://mp.weixin.qq.com" target="_blank">link</a> and log into WeChat.</p>
+                                            <p><span class="bold">3.</span> Go to <span class="bold">设置 | 公共号设置</span>, copy the value of the “原始ID” field and save it to the WeChat ID field.</p>
+                                            <p><span class="bold">4.</span> According to the value of the "类型" field in WeChat, choose either Service Account or Subscription Account for the WeChat Account Type field.</p>
+                                            <div style="margin-left:25px">
+                                                <p>
+                                                    <span class="bold">Service Account</span> for 服务号
+                                                </p>
+                                                <p>
+                                                    <span class="bold">Subscription Account</span> for 订阅号
+                                                </p>
+                                            </div>
+                                            <p><span class="bold">5.</span> Click the "<span class="bold">Next</span>" button.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div align="center" class="input-div">
+                                    <table style="margin-right:120px;">
+                                        <tr>
+                                            <td class="lab">
+                                                WeChat Account Name
+                                            </td>
+                                            <td>
+                                                <div class="required-input">
+                                                    <div class="required-block"></div>
+                                                    <apex:inputField value="{!WXAccount.Name}" id="name"/>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="lab">
+                                                WeChat ID
+                                            </td>
+                                            <td>
+                                                <div class="required-input">
+                                                    <div class="required-block"></div>
+                                                    <apex:inputField value="{!WXAccount.CharketFree__WeChatId__c}" id="wechatId"/>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="lab">
+                                                WeChat Account Type
+                                            </td>
+                                            <td>
+                                                <div class="required-input">
+                                                    <div class="required-block"></div>
+                                                    <apex:inputField styleClass="RemoveNone" value="{!WXAccount.CharketFree__Type__c}" id="type"/>
+                                                </div>
+                                            </td>
+                                            <td style="width:40px;">
+                                                <apex:actionStatus id="saveStatus">
+                                                    <apex:facet name="start">
+                                                        <apex:image value="/img/loading.gif" width="20" height="20"/>
+                                                        </apex:facet>
+                                                </apex:actionStatus>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="step2-btn">
+                                        <input type="button" value="Back" class="btn-normal" id="prev" style="width:60px;"/>
+                                        <apex:commandButton styleClass="btn-main" style="margin-left:2px; margin-top:0px" action="{!saveAccount}" reRender="step2Err" value="Next" oncomplete="validateStep2()" status="saveStatus"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:actionRegion>
+                        <apex:actionRegion >
+                            <div class="step-pane" id="step3">
+                                <div class="nav-horiz" align="center">
+                                    <ul>
+                                        <li class="nav-li" style="margin-left:0px">
+                                            <a>
+                                                <span class="badge badge-info">1</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-li">
+                                            <a>
+                                                <span class="badge">2</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-li">
+                                            <a>
+                                                <span class="badge">3</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-li">
+                                            <a>
+                                                <span class="badge">4</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <apex:pageMessages id="step3Err"/>
+                                <apex:outputpanel id="refreshpanel">
+                                       <apex:actionFunction name="checkVerify" action="{!checkVerify}"  reRender="refreshpanel" oncomplete="check('{!Isverified}')"/>
+                                </apex:outputPanel>
+                                <apex:actionFunction name="generateUrlAndToken" action="{!generateUrlAndToken}" reRender="generate" status="generateStatus" oncomplete="setUrlAndToken();"/>
+
+                                <div class="wizard-card active" align="center">
+                                    <span class="title">WeChat Server Setup</span>
+                                    <div class="message infoM4" style="background-color: #f5fcff; width: 50%; margin: 4px 0px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" class="messageTable" width="100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <img alt="Information" class="msgIcon" src="/s.gif" title="Information"/>
+                                                    </td>
+                                                    <td class="messageCell">
+                                                        <div class="messageText" style="margin-left:0px;">Note, the following steps need to be completed on the WeChat side.
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="server-config-description">
+                                        Go to <span class="bold"> 开发者中心 </span> and click <span class="bold"> 修改配置 </span>.
+                                    </div>
+                                    <apex:image url="{!URLFOR($Resource.CharketFree__CharketStyle, 'wizardImages/update.jpg')}" styleClass="server-config-image"/>
+                                </div>
+
+                                <div class="wizard-card" align="center">
+                                    <span class="title">Update WeChat Server Settings</span>
+                                    <div class="server-config-description">
+                                        Save the following <span class="bold">URL</span> and <span class="bold">Token</span> to their coresponding fields in WeChat.
+                                    </div>
+                                    <apex:image url="{!URLFOR($Resource.CharketFree__CharketStyle, 'wizardImages/config.jpg')}" styleClass="server-config-description" style="border: 1px solid #F2F2F3; border-radius: 5px; margin-bottom: 25px;"/>
+                                    <table>
+                                        <tr>
+                                            <td class="lab">URL</td>
+                                            <td>
+                                                <input type="text" id="url" readonly="readonly" style="width:400px; cursor:default;"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="lab">Token</td>
+                                            <td>
+                                                <input type="text" id="token" readonly="readonly" style="width:400px; cursor:default;"/>
+                                            </td>
+                                            <td style="width:40px;">
+                                                <apex:outputPanel id="generate">
+                                                    <apex:actionStatus id="generateStatus">
+                                                        <apex:facet name="start">
+                                                            <apex:image value="/img/loading.gif" width="20" height="20"/>
+                                                        </apex:facet>
+                                                    </apex:actionStatus>
+                                                   <apex:outputText value="{!Url}" id="newu" style="display:none;"></apex:outputText>
+                                                   <apex:outputText value="{!Token}" id="newt" style="display:none;"></apex:outputText>
+                                                </apex:outputPanel>
+                                                <apex:outputPanel id="check">
+                                                    <apex:actionStatus id="checkStatus">
+                                                        <apex:facet name="start">
+                                                            <apex:image value="/img/loading.gif" width="20" height="20"/>
+                                                        </apex:facet>
+                                                    </apex:actionStatus>
+                                                </apex:outputPanel>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="wizard-card" align="center">
+                                    <span class="title">Activate WeChat Server Settings</span>
+                                    <div class="server-config-description">
+                                        Click<span class="bold"> 启用</span> to activate WeChat server settings.
+                                    </div>
+                                    <apex:image url="{!URLFOR($Resource.CharketFree__CharketStyle, 'wizardImages/turnon.jpg')}" styleClass="server-config-image"/>
+                                </div>
+
+                                <div class="wizard-card" align="center">
+                                    <span class="title">Check Activation Result</span>
+                                    <div >
+                                        <table cellspacing="0"  id="verifyMessage" cellpadding="0" border="0" class="detailList" style="display: none; width: 500px;">
+                                            <tbody>
+                                                <tr class="detailRow last">
+                                                    <td colspan="4">
+                                                        <div id="topMessage" class="message errorM3">
+                                                            <table cellspacing="0" cellpadding="0" border="0" class="messageTable">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img title="ERROR" class="msgIcon" alt="ERROR" src="/s.gif"/>
+                                                                        </td>
+                                                                        <td class="messageCell">
+                                                                            <div class="messageText" align="left">
+                                                                                <span class="topMessageContent">
+                                                                                Please make sure both the URL and the Token were submitted to WeChat and successful verified. 
+                                                                                </span>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="server-config-description">
+                                        <div>
+                                            Make sure the Activate(启用) button became Deactivate(停用) and its color turned red. This means WeChat settings were activated.
+                                            <apex:image value="/img/loading.gif" width="20" height="20" id="verifyStatus" styleClass="before-verify"/>
+                                        </div>
+                                    </div>
+                                    <apex:image url="{!URLFOR($Resource.CharketFree__CharketStyle, 'wizardImages/afterturnon.jpg')}" styleClass="server-config-image"/>
+                                </div>
+                            </div>
+                        </apex:actionRegion>
+                        <div class="step-pane" id="step4">
+                            <apex:pageMessages id="step4Err"/>
+                            <div align="center">
+                                <div class="server-config-description">
+                                    Go to <span class="bold">开发者中心</span> in WeChat public platform, find <span class="bold">AppId</span> and <span class="bold">AppSecret</span>, copy and fill them bellow.
+                                </div>
+                                <apex:image url="{!URLFOR($Resource.CharketFree__CharketStyle, 'wizardImages/appId.jpg')}" styleClass="server-config-image" style="border: 1px solid #F2F2F3; border-radius: 5px; margin-bottom: 25px;"/>
+                            </div>
+                            <div align="center">
+                                <table>
+                                    <tr>
+                                        <td class="lab">AppId</td>
+                                        <td>
+                                            <div class="required-input">
+                                                <div class="required-block"></div>
+                                                <apex:inputField value="{!WXAccount.CharketFree__AppId__c}" id="appid"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="lab">AppSecret</td>
+                                        <td>
+                                            <div class="required-input" style="width:430px;">
+                                                <div class="required-block"></div>
+                                                <apex:inputField value="{!WXAccount.CharketFree__AppSecret__c}" id="appsec"/>
+                                                <span id="appErr" class="err" style="display:none;">Invalid AppId or AppSecret.</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="lab">QRCode</td>
+                                        <td>
+                                            <apex:inputFile value="{!Attach.Body}" fileName="{!Attach.Name}"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <input class="btn-normal" id="btnPrev" type="button" value="Back" style="width:60px;"/>
+                            <input class="btn-main" id="btnWizardNext" type="button" value="Next" style="width:60px; margin-left: 3px;"/>
+                            <!-- <apex:commandButton value="submitToServer" styleClass="btn-main" style="margin-left:2px; margin-top:0px; display:none" id="submitToServer" onclick="return validateStep4()" action="{!updateAccount}"/> -->
+                            <input type="button" onclick="validateStep4()" value="Submit" class="btn-main" style="margin-left:2px; margin-top:0px; display:none" id="submitToServer"/>
+                            <apex:actionFunction name="update" action="{!updateAccount}"/>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </apex:outputPanel>
+    </apex:form>
+    </body>
+    <script type="text/javascript">
+
+        function setFocusOnLoad() {}
+
+        $(function () {
+            $('select.RemoveNone option[value=]').remove();
+        });
+
+        $('#btnPrev').on('click', function() {
+            if($('#MyWizard').wizard('selectedItem').step == 1){
+                window.history.go(-1);
+            }
+            else if($('#MyWizard').wizard('selectedItem').step == 3){
+                $('[id$=verifyMessage]').hide();
+                if($('.nav-li').eq(0).find('span').hasClass('badge-info')){
+                    previous();
+                    $('.btn-group').hide();
+                }
+                else
+                {
+                    $('.nav-li').each(function(index){
+                        if( $(this).find('span').hasClass('badge-info')){
+                            $(this).find('span').removeClass('badge-info');
+                            $(this).find('span').addClass('badge-success');
+                            $('.nav-li').eq(index-1).find('span').addClass('badge-info');
+                            $('.wizard-card').eq(index).removeClass('active');
+                            $('.wizard-card').eq(index-1).addClass('active');
+                        }
+                    });
+                }
+            }
+            else if($('#MyWizard').wizard('selectedItem').step == 4)
+            {
+                $('.nav-li').eq(3).find('span').addClass('badge-info');
+                previous();
+                $('[id$=submitToServer]').hide();
+                $('#btnWizardNext').show();
+            }
+            else
+            {
+                previous();
+            }
+            removeFinishedStyle();
+        });
+
+        $('[id$=prev]').click(function(){
+            previous();
+            $('.btn-group').show();
+            removeFinishedStyle();
+        });
+
+        $('#btnWizardNext').click(function(){
+            if($('#MyWizard').wizard('selectedItem').step == 1){
+                var siteUrl = $('[id$=site]').val();
+                validateStep1(siteUrl);
+                if(validateStep1(siteUrl)){
+                    $('.btn-group').hide();
+                    next();
+                }
+            }
+            else if($('#MyWizard').wizard('selectedItem').step == 3){
+                $('.nav-li').each(function(index){
+                    if( $(this).find('span').hasClass('badge-info') || index == 3){
+
+                        if(index != 3)
+                        {
+                            $(this).find('span').removeClass('badge-info');
+                            $(this).find('span').addClass('badge-success');
+                            if(index == 0 && ($('[id$=url]').val() == '' || $('[id$=url]').val() == null || $('[id$=token]').val() == '' || $('[id$=token]').val() == null)){
+                                    generateUrlAndToken();
+                                }
+                            $('.nav-li').eq(index+1).find('span').addClass('badge-info');
+                            $('.wizard-card').eq(index).removeClass('active');
+                            $('.wizard-card').eq(index+1).addClass('active');
+                            return false;
+                        }
+                        else{
+                            $('[id$=verifyStatus]').css('display', 'block');
+                            checkVerify();
+                        }
+                    }
+                });
+            }
+            removeDefaultComplete();
+        });
+
+        $('.nav-li').mouseover(function(){
+            $('.nav-li').each(function(index){
+                $(this).click(function(){
+                    $('.nav-li').each(function(i){
+                        $(this).find('span').removeClass('badge-info');
+                        $('.wizard-card').eq(i).removeClass('active');
+                    });
+                    $(this).find('span').addClass('badge-info');
+                    $('.wizard-card').eq(index).addClass('active');
+                    if(index == 1)
+                    {
+                        if(!$('.nav-li').eq(index).find('span').hasClass('badge-success')){
+                           if($('[id$=url]').val() == '' || $('[id$=url]').val() == null || $('[id$=token]').val() == '' || $('[id$=token]').val() == null){
+                                generateUrlAndToken();
+                           }
+                        }
+                    }
+                });
+
+            });
+
+        });
+
+        $('[id$=site]').focus(function(){
+            if($('#url-invalid').css('display') != 'none'){
+                $('#url-invalid').hide();
+            }
+        });
+
+        $('[id$=appid]').focus(function(){
+            if($('#appErr').css('display') != 'none'){
+                $('#appErr').hide();
+            }
+        });
+
+        $('[id$=appsec]').focus(function(){
+            if($('#appErr').css('display') != 'none'){
+                $('#appErr').hide();
+            }
+        });
+
+        function previous() {
+            $('#MyWizard').wizard('previous');
+        }
+
+        function next() {
+            $('#MyWizard').wizard('next');
+        }
+
+        function validateStep1(siteUrl) {
+            var pattern = /(https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+            if(siteUrl.charAt(siteUrl.length-1) == '/'){
+                siteUrl = siteUrl.substring(0, (siteUrl.length - 1));
+                $('[id$=site]').val(siteUrl);
+            }
+            if (pattern.test(siteUrl)){
+                return true;
+            }
+            $('#url-invalid').show();
+            return false;
+        }
+
+        function validateStep2() {
+            if($('[id$=step2Err]').html() == '')
+            {
+                next();
+                $('.btn-group').show();
+                removeDefaultComplete();
+            }
+        }
+
+        function check(verifyFlag) {
+            if($('[id$=step3Err]').html() == '' && verifyFlag == 'true'){
+                next();
+                $('#btnWizardNext').hide();
+                $('[id$=submitToServer]').show();
+                $('[id$=verifyStatus]').css('display', 'none');
+                $('[id$=verifyMessage]').hide();
+                return false;
+            } else {
+                $('[id$=verifyStatus]').css('display', 'none');
+                $('[id$=verifyMessage]').show();
+            }
+        }
+
+        function validateStep4() {
+            var appid = $('[id$=appid]').val();
+            var appsec =  $('[id$=appsec]').val();
+
+            CharketFree.BindWizardController.checkCredential(appid, appsec, function(result, event){
+                if(event.status){
+                    if(!result){
+                        $('[id$=appErr]').show();
+                    }
+                    else{
+                        update();
+                    }
+                    return result;
+                }
+            },{escape:false});
+            //if('[id$=appErr]').css('display', 'none'))
+        }
+
+        function removeDefaultComplete(){
+            $('.steps li').each(function(index){
+                if($(this).hasClass('complete')){
+                    $(this).removeClass('complete');
+                    $(this).addClass('finished');
+                }
+            });
+        }
+
+        function removeFinishedStyle(){
+            $('.steps li').each(function(index){
+                if($(this).hasClass('active') && $(this).hasClass('finished')){
+                    $(this).removeClass('finished');
+                }
+            });
+        }
+
+        function setUrlAndToken(){
+            var url = $('[id$=newu]').text();
+            var token = $('[id$=newt]').text();
+            $('[id$=url]').val(url);
+            $('[id$=token]').val(token);
+        }
+    </script>
+</apex:page>
